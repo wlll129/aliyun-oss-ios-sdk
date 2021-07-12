@@ -25,6 +25,15 @@ int32_t const CHUNK_SIZE = 8 * 1024;
 
 @implementation OSSUtil
 
++ (BOOL)isIncludeCnameExcludeList:(NSArray *)cnameExcludeList host:(NSString *)host {
+    for (NSString *cnameExclude in cnameExcludeList) {
+        if ([host hasSuffix:cnameExclude]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 + (NSString *)calBase64Sha1WithData:(NSString *)data withSecret:(NSString *)key {
     NSData *secretData = [key dataUsingEncoding:NSUTF8StringEncoding];
     NSData *clearTextData = [data dataUsingEncoding:NSUTF8StringEncoding];
@@ -1038,6 +1047,7 @@ int32_t const CHUNK_SIZE = 8 * 1024;
             @"wvx": @"video/x-ms-wvx",
             @"avi": @"video/x-msvideo",
             @"movie": @"video/x-sgi-movie",
+            @"mov": @"video/quicktime",
             @"ice": @"x-conference/x-cooltalk",
             @"par ": @"text/plain-bas",
             @"yaml": @"text/yaml"
