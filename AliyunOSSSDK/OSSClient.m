@@ -32,6 +32,7 @@ static NSString * const kClientRecordNameWithCommonPrefix = @"oss_partInfos_stor
 static NSString * const kClientRecordNameWithCRC64Suffix = @"-crc64";
 static NSString * const kClientRecordNameWithSequentialSuffix = @"-sequential";
 static NSUInteger const kClientMaximumOfChunks = 5000;   //max part number
+static NSUInteger const kPartSizeAlign = 4 * 1024;   // part size byte alignment
 
 static NSString * const kClientErrorMessageForEmptyFile = @"the length of file should not be 0!";
 static NSString * const kClientErrorMessageForCancelledTask = @"This task has been cancelled!";
@@ -78,7 +79,9 @@ static NSObject *lock;
             lock = [NSObject new];
         }
         // Monitor the network. If the network type is changed, recheck the IPv6 status.
-        [OSSReachabilityManager shareInstance];
+        if (conf.isNeedListenNetworkChanges) {
+            [OSSReachabilityManager shareInstance];
+        }
 
         NSOperationQueue * queue = [NSOperationQueue new];
         // using for resumable upload and compat old interface
@@ -275,11 +278,17 @@ static NSObject *lock;
     
     if(partCount > kClientMaximumOfChunks)
     {
-        request.partSize = fileSize / kClientMaximumOfChunks;
-        partCount = kClientMaximumOfChunks;
+        NSUInteger partSize = fileSize / (kClientMaximumOfChunks - 1);
+        request.partSize = [self ceilPartSize:partSize];
+        partCount = (fileSize / request.partSize) + ((fileSize % request.partSize == 0) ? 0 : 1);
     }
     return partCount;
 #pragma clang diagnostic pop
+}
+
+- (NSUInteger)ceilPartSize:(NSUInteger)partSize {
+    partSize = (((partSize + (kPartSizeAlign - 1)) / kPartSizeAlign) * kPartSizeAlign);
+    return partSize;
 }
 
 - (unsigned long long)getSizeWithFilePath:(nonnull NSString *)filePath error:(NSError **)error
@@ -1599,10 +1608,12 @@ static NSObject *lock;
 #pragma clang diagnostic pop
             
                 NSDictionary *tPartInfo = [localPartInfos objectForKey: [@(remotePartNumber) stringValue]];
-                info.crc64 = [tPartInfo[@"crc64"] unsignedLongLongValue];
-                
-                [uploadedPartInfos addObject:info];
-                [alreadyUploadIndex addObject:@(remotePartNumber)];
+                if (tPartInfo != nil) {
+                    info.crc64 = [tPartInfo[@"crc64"] unsignedLongLongValue];
+                    
+                    [uploadedPartInfos addObject:info];
+                    [alreadyUploadIndex addObject:@(remotePartNumber)];
+                }
             }];
             
             if ([alreadyUploadIndex count] > 0 && request.uploadProgress && uploadFileSize) {
