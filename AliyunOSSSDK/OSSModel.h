@@ -252,7 +252,7 @@ Sets the session Id for background file transmission
 /**
  The download range of OSS object
  */
-@interface OSSRange : NSObject
+@interface OSSRange : NSObject <NSCopying>
 @property (nonatomic, assign) int64_t startPosition;
 @property (nonatomic, assign) int64_t endPosition;
 

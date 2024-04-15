@@ -17,6 +17,7 @@
 #define OSSUAPrefix                             @"aliyun-sdk-mac"
 #endif
 #define OSSSDKVersion                           @"2.10.10"
+#define OSSUserAgentSuffix                      @"/OSSEncryptionClient"
 
 #define OSSListBucketResultXMLTOKEN             @"ListBucketResult"
 #define OSSNameXMLTOKEN                         @"Name"
@@ -66,6 +67,8 @@
 #define OSSHttpHeaderContentEncoding            @"Content-Encoding"
 #define OSSHttpHeaderContentType                @"Content-Type"
 #define OSSHttpHeaderContentMD5                 @"Content-MD5"
+#define OSSHttpHeaderContentRange               @"Content-Range"
+#define OSSHttpHeaderContentLength              @"Content-Length"
 #define OSSHttpHeaderCacheControl               @"Cache-Control"
 #define OSSHttpHeaderExpires                    @"Expires"
 #define OSSHttpHeaderHashSHA1                   @"x-oss-hash-sha1"
@@ -73,6 +76,15 @@
 #define OSSHttpHeaderObjectACL                  @"x-oss-object-acl"
 #define OSSHttpHeaderCopySource                 @"x-oss-copy-source"
 #define OSSHttpHeaderSymlinkTarget              @"x-oss-symlink-target"
+#define OSSHttpHeaderCryptoKey                  @"x-oss-meta-client-side-encryption-key"
+#define OSSHttpHeaderCryptoIV                   @"x-oss-meta-client-side-encryption-start"
+#define OSSHttpHeaderCryptoCEKAlg               @"x-oss-meta-client-side-encryption-cek-alg"
+#define OSSHttpHeaderCryptoWrapAlg              @"x-oss-meta-client-side-encryption-wrap-alg"
+#define OSSHttpHeaderCryptoMatdesc              @"x-oss-meta-client-side-encryption-matdesc"
+#define OSSHttpHeaderCryptoDataSize             @"x-oss-meta-client-side-encryption-data-size"
+#define OSSHttpHeaderCryptoPartSize             @"x-oss-meta-client-side-encryption-part-size"
+#define OSSHttpHeaderCryptoUnencryptedContentLength @"x-oss-meta-client-side-encryption-unencrypted-content-length"
+#define OSSHttpHeaderCryptoContentMD5           @"x-oss-meta-client-side-encryption-unencrypted-content-md5"
 
 #define OSSHttpQueryProcess                     @"x-oss-process"
 

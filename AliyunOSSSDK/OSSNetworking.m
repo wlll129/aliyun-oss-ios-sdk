@@ -233,7 +233,10 @@
         } else if (requestDelegate.uploadingFileURL) {
             sessionTask = [_session uploadTaskWithRequest:requestDelegate.internalRequest fromFile:requestDelegate.uploadingFileURL];
 
-                requestDelegate.isBackgroundUploadFileTask = self.isUsingBackgroundSession;
+            requestDelegate.isBackgroundUploadFileTask = self.isUsingBackgroundSession;
+        } else if (requestDelegate.uploadingInputStream) {
+            sessionTask = [_session uploadTaskWithStreamedRequest:requestDelegate.internalRequest];
+            requestDelegate.isBackgroundUploadFileTask = self.isUsingBackgroundSession;
         } else { // not upload request
             sessionTask = [_session dataTaskWithRequest:requestDelegate.internalRequest];
         }
@@ -302,6 +305,15 @@
                 return [OSSTask taskWithError:[NSError errorWithDomain:OSSClientErrorDomain
                                                                  code:OSSClientErrorCodeTaskCancelled
                                                              userInfo:[error userInfo]]];
+            } else if ([delegate.error.domain isEqualToString:NSURLErrorDomain] &&
+                       delegate.error.code == NSURLErrorUnknown &&
+                       sessionTask.currentRequest.HTTPBodyStream &&
+                       sessionTask.currentRequest.HTTPBodyStream.streamError) {
+                return [OSSTask taskWithError:sessionTask.currentRequest.HTTPBodyStream.streamError];
+            } else if ([delegate.error.domain isEqualToString:OSSClientErrorDomain] &&
+                       (delegate.error.code == OSSClientErrorCodeCryptoUpdate ||
+                        delegate.error.code == OSSClientErrorCodeCannotDecrypted)) {
+                return [OSSTask taskWithError:delegate.error];
             } else {
                 NSMutableDictionary * userInfo = [NSMutableDictionary dictionaryWithDictionary:[error userInfo]];
                 [userInfo setObject:[NSString stringWithFormat:@"%ld", (long)error.code] forKey:@"OriginErrorCode"];
@@ -425,6 +437,14 @@
     // Uses the default evaluation for other challenges.
     completionHandler(disposition,credential);
 }
+
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
+ needNewBodyStream:(void (^)(NSInputStream *bodyStream))completionHandler {
+    OSSNetworkingRequestDelegate * delegate = [self.sessionDelagateManager objectForKey:@(task.taskIdentifier)];
+    completionHandler(delegate.uploadingInputStream);
+}
+
 
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
 {

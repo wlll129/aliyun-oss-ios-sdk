@@ -15,6 +15,7 @@
 #import "OSSUtil.h"
 #import "OSSLog.h"
 #import "OSSIPv6Adapter.h"
+#import "CipherInputStream.h"
 
 @implementation OSSNetworkingRequestDelegate
 
@@ -33,6 +34,10 @@
     self.payloadTotalBytesWritten = 0;
     self.isRequestCancelled = NO;
     [self.responseParser reset];
+    if ([self.uploadingInputStream isKindOfClass:[CipherInputStream class]]) {
+        CipherInputStream *inputStream = (CipherInputStream *)self.uploadingInputStream;
+        [inputStream reset];
+    }
 }
 
 - (void)cancel {
@@ -47,7 +52,7 @@
     NSString * errorMessage = nil;
     
     if ((self.operType == OSSOperationTypeAppendObject || self.operType == OSSOperationTypePutObject || self.operType == OSSOperationTypeUploadPart)
-        && !self.uploadingData && !self.uploadingFileURL) {
+        && !self.uploadingData && !self.uploadingFileURL && !self.uploadingInputStream) {
         errorMessage = @"This operation need data or file to upload but none is set";
     }
     

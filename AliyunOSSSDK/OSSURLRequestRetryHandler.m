@@ -30,7 +30,9 @@
     }
     
     if ([error.domain isEqualToString:OSSClientErrorDomain]) {
-        if (error.code == OSSClientErrorCodeTaskCancelled) {
+        if (error.code == OSSClientErrorCodeTaskCancelled ||
+            error.code == OSSClientErrorCodeCryptoCreateFailed ||
+            error.code == OSSClientErrorCodeCryptoUpdate) {
             return OSSNetworkingRetryTypeShouldNotRetry;
         } else {
             return OSSNetworkingRetryTypeShouldRetry;

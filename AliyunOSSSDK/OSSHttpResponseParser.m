@@ -23,7 +23,7 @@
 
 
 @implementation OSSHttpResponseParser {
-    
+ 
     OSSOperationType _operationTypeForThisParser;
     
     NSFileHandle * _fileHandle;
@@ -64,6 +64,12 @@
             _crc64ecma = [mutableData oss_crc64];
         }
     }
+    
+    OSSTask *task = [self handleData:data];
+    if (task.error) {
+        return task;
+    }
+    data = task.result;
     
     if (self.onRecieveBlock) {
         self.onRecieveBlock(data);
@@ -650,6 +656,10 @@
         }
     }
     return nil;
+}
+
+- (OSSTask *)handleData:(NSData *)data {
+    return [OSSTask taskWithResult:data];
 }
 
 @end

@@ -8,6 +8,56 @@
 
 /* Begin PBXBuildFile section */
 		4CEF14F81F5522A1007010B8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 216256EF1CF1B1580086458F /* SystemConfiguration.framework */; };
+		5441490226FD6EE100081F1D /* OSSEncryptUASettingInterceptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 5441490026FD6EE100081F1D /* OSSEncryptUASettingInterceptor.h */; };
+		5441490326FD6EE100081F1D /* OSSEncryptUASettingInterceptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 5441490026FD6EE100081F1D /* OSSEncryptUASettingInterceptor.h */; };
+		5441490426FD6EE100081F1D /* OSSEncryptUASettingInterceptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5441490126FD6EE100081F1D /* OSSEncryptUASettingInterceptor.m */; };
+		5441490526FD6EE100081F1D /* OSSEncryptUASettingInterceptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5441490126FD6EE100081F1D /* OSSEncryptUASettingInterceptor.m */; };
+		5466057126D3A33A001F2C06 /* OSSCryptoHttpResponseParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466055A26D3A33A001F2C06 /* OSSCryptoHttpResponseParser.m */; };
+		5466057226D3A33A001F2C06 /* OSSCryptoHttpResponseParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466055A26D3A33A001F2C06 /* OSSCryptoHttpResponseParser.m */; };
+		5466057326D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466055B26D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466057426D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466055B26D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466057526D3A33A001F2C06 /* Cryptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466055C26D3A33A001F2C06 /* Cryptor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466057626D3A33A001F2C06 /* Cryptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466055C26D3A33A001F2C06 /* Cryptor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466057726D3A33A001F2C06 /* CryptoScheme.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466055D26D3A33A001F2C06 /* CryptoScheme.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466057826D3A33A001F2C06 /* CryptoScheme.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466055D26D3A33A001F2C06 /* CryptoScheme.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466057926D3A33A001F2C06 /* MultipartUploadCryptoContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466055E26D3A33A001F2C06 /* MultipartUploadCryptoContext.m */; };
+		5466057A26D3A33A001F2C06 /* MultipartUploadCryptoContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466055E26D3A33A001F2C06 /* MultipartUploadCryptoContext.m */; };
+		5466057B26D3A33A001F2C06 /* CryptoSchemeAesCtr.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466055F26D3A33A001F2C06 /* CryptoSchemeAesCtr.m */; };
+		5466057C26D3A33A001F2C06 /* CryptoSchemeAesCtr.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466055F26D3A33A001F2C06 /* CryptoSchemeAesCtr.m */; };
+		5466057D26D3A33A001F2C06 /* CryptoConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056026D3A33A001F2C06 /* CryptoConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466057E26D3A33A001F2C06 /* CryptoConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056026D3A33A001F2C06 /* CryptoConfiguration.h */; };
+		5466057F26D3A33A001F2C06 /* ContentCryptoMaterial.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466056126D3A33A001F2C06 /* ContentCryptoMaterial.m */; };
+		5466058026D3A33A001F2C06 /* ContentCryptoMaterial.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466056126D3A33A001F2C06 /* ContentCryptoMaterial.m */; };
+		5466058126D3A33A001F2C06 /* OSSEncryptionClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056226D3A33A001F2C06 /* OSSEncryptionClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466058226D3A33A001F2C06 /* OSSEncryptionClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056226D3A33A001F2C06 /* OSSEncryptionClient.h */; };
+		5466058326D3A33A001F2C06 /* CipherInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056326D3A33A001F2C06 /* CipherInputStream.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466058426D3A33A001F2C06 /* CipherInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056326D3A33A001F2C06 /* CipherInputStream.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466058526D3A33A001F2C06 /* EncryptionMaterials.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056426D3A33A001F2C06 /* EncryptionMaterials.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466058626D3A33A001F2C06 /* EncryptionMaterials.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056426D3A33A001F2C06 /* EncryptionMaterials.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466058926D3A33A001F2C06 /* Cryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466056626D3A33A001F2C06 /* Cryptor.m */; };
+		5466058A26D3A33A001F2C06 /* Cryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466056626D3A33A001F2C06 /* Cryptor.m */; };
+		5466058B26D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466056726D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.m */; };
+		5466058C26D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466056726D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.m */; };
+		5466058D26D3A33A001F2C06 /* OSSCryptoHttpResponseParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056826D3A33A001F2C06 /* OSSCryptoHttpResponseParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466058E26D3A33A001F2C06 /* OSSCryptoHttpResponseParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056826D3A33A001F2C06 /* OSSCryptoHttpResponseParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466058F26D3A33A001F2C06 /* CryptoSchemeAesCtr.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056926D3A33A001F2C06 /* CryptoSchemeAesCtr.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466059026D3A33A001F2C06 /* CryptoSchemeAesCtr.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056926D3A33A001F2C06 /* CryptoSchemeAesCtr.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466059126D3A33A001F2C06 /* MultipartUploadCryptoContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056A26D3A33A001F2C06 /* MultipartUploadCryptoContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466059226D3A33A001F2C06 /* MultipartUploadCryptoContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056A26D3A33A001F2C06 /* MultipartUploadCryptoContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466059326D3A33A001F2C06 /* CryptoScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466056B26D3A33A001F2C06 /* CryptoScheme.m */; };
+		5466059426D3A33A001F2C06 /* CryptoScheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466056B26D3A33A001F2C06 /* CryptoScheme.m */; };
+		5466059526D3A33A001F2C06 /* ContentCryptoMaterial.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056C26D3A33A001F2C06 /* ContentCryptoMaterial.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466059626D3A33A001F2C06 /* ContentCryptoMaterial.h in Headers */ = {isa = PBXBuildFile; fileRef = 5466056C26D3A33A001F2C06 /* ContentCryptoMaterial.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5466059726D3A33A001F2C06 /* CryptoConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466056D26D3A33A001F2C06 /* CryptoConfiguration.m */; };
+		5466059826D3A33A001F2C06 /* CryptoConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466056D26D3A33A001F2C06 /* CryptoConfiguration.m */; };
+		5466059B26D3A33A001F2C06 /* CipherInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466056F26D3A33A001F2C06 /* CipherInputStream.m */; };
+		5466059C26D3A33A001F2C06 /* CipherInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466056F26D3A33A001F2C06 /* CipherInputStream.m */; };
+		5466059D26D3A33A001F2C06 /* OSSEncryptionClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466057026D3A33A001F2C06 /* OSSEncryptionClient.m */; };
+		5466059E26D3A33A001F2C06 /* OSSEncryptionClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 5466057026D3A33A001F2C06 /* OSSEncryptionClient.m */; };
+		547052C9278BDB3F00A98E7D /* CryptoModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 547052C7278BDB3F00A98E7D /* CryptoModule.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		547052CA278BDB3F00A98E7D /* CryptoModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 547052C7278BDB3F00A98E7D /* CryptoModule.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		547052CB278BDB3F00A98E7D /* CryptoModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 547052C8278BDB3F00A98E7D /* CryptoModule.m */; };
+		547052CC278BDB3F00A98E7D /* CryptoModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 547052C8278BDB3F00A98E7D /* CryptoModule.m */; };
 		D80C81F51FC824E2008E3900 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D80C81F41FC824D5008E3900 /* SystemConfiguration.framework */; };
 		D80C81F71FC824FF008E3900 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D80C81F61FC824FF008E3900 /* CoreTelephony.framework */; };
 		D80C81FB1FC82541008E3900 /* OSSModel.h in Headers */ = {isa = PBXBuildFile; fileRef = D87183091FC56358000DD9EC /* OSSModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -227,6 +277,31 @@
 		216256EF1CF1B1580086458F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4C7D8BB61F8CC70F005D3040 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		4C7D8BB81F8CC741005D3040 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		5441490026FD6EE100081F1D /* OSSEncryptUASettingInterceptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSSEncryptUASettingInterceptor.h; sourceTree = "<group>"; };
+		5441490126FD6EE100081F1D /* OSSEncryptUASettingInterceptor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OSSEncryptUASettingInterceptor.m; sourceTree = "<group>"; };
+		5466055A26D3A33A001F2C06 /* OSSCryptoHttpResponseParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSSCryptoHttpResponseParser.m; sourceTree = "<group>"; };
+		5466055B26D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSSimpleRSAEncryptionMaterials.h; sourceTree = "<group>"; };
+		5466055C26D3A33A001F2C06 /* Cryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cryptor.h; sourceTree = "<group>"; };
+		5466055D26D3A33A001F2C06 /* CryptoScheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoScheme.h; sourceTree = "<group>"; };
+		5466055E26D3A33A001F2C06 /* MultipartUploadCryptoContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultipartUploadCryptoContext.m; sourceTree = "<group>"; };
+		5466055F26D3A33A001F2C06 /* CryptoSchemeAesCtr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptoSchemeAesCtr.m; sourceTree = "<group>"; };
+		5466056026D3A33A001F2C06 /* CryptoConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoConfiguration.h; sourceTree = "<group>"; };
+		5466056126D3A33A001F2C06 /* ContentCryptoMaterial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentCryptoMaterial.m; sourceTree = "<group>"; };
+		5466056226D3A33A001F2C06 /* OSSEncryptionClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSEncryptionClient.h; sourceTree = "<group>"; };
+		5466056326D3A33A001F2C06 /* CipherInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CipherInputStream.h; sourceTree = "<group>"; };
+		5466056426D3A33A001F2C06 /* EncryptionMaterials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptionMaterials.h; sourceTree = "<group>"; };
+		5466056626D3A33A001F2C06 /* Cryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cryptor.m; sourceTree = "<group>"; };
+		5466056726D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSSSimpleRSAEncryptionMaterials.m; sourceTree = "<group>"; };
+		5466056826D3A33A001F2C06 /* OSSCryptoHttpResponseParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSCryptoHttpResponseParser.h; sourceTree = "<group>"; };
+		5466056926D3A33A001F2C06 /* CryptoSchemeAesCtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoSchemeAesCtr.h; sourceTree = "<group>"; };
+		5466056A26D3A33A001F2C06 /* MultipartUploadCryptoContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultipartUploadCryptoContext.h; sourceTree = "<group>"; };
+		5466056B26D3A33A001F2C06 /* CryptoScheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptoScheme.m; sourceTree = "<group>"; };
+		5466056C26D3A33A001F2C06 /* ContentCryptoMaterial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentCryptoMaterial.h; sourceTree = "<group>"; };
+		5466056D26D3A33A001F2C06 /* CryptoConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptoConfiguration.m; sourceTree = "<group>"; };
+		5466056F26D3A33A001F2C06 /* CipherInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CipherInputStream.m; sourceTree = "<group>"; };
+		5466057026D3A33A001F2C06 /* OSSEncryptionClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSSEncryptionClient.m; sourceTree = "<group>"; };
+		547052C7278BDB3F00A98E7D /* CryptoModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CryptoModule.h; sourceTree = "<group>"; };
+		547052C8278BDB3F00A98E7D /* CryptoModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CryptoModule.m; sourceTree = "<group>"; };
 		D80C81EC1FC824A8008E3900 /* AliyunOSSOSX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AliyunOSSOSX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D80C81F41FC824D5008E3900 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
 		D80C81F61FC824FF008E3900 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/System/Library/Frameworks/CoreTelephony.framework; sourceTree = DEVELOPER_DIR; };
@@ -401,6 +476,38 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		5466055926D3A33A001F2C06 /* crypto */ = {
+			isa = PBXGroup;
+			children = (
+				5466056C26D3A33A001F2C06 /* ContentCryptoMaterial.h */,
+				5466056126D3A33A001F2C06 /* ContentCryptoMaterial.m */,
+				5466056026D3A33A001F2C06 /* CryptoConfiguration.h */,
+				5466056D26D3A33A001F2C06 /* CryptoConfiguration.m */,
+				5466055C26D3A33A001F2C06 /* Cryptor.h */,
+				5466056626D3A33A001F2C06 /* Cryptor.m */,
+				5466055D26D3A33A001F2C06 /* CryptoScheme.h */,
+				5466056B26D3A33A001F2C06 /* CryptoScheme.m */,
+				5466056926D3A33A001F2C06 /* CryptoSchemeAesCtr.h */,
+				5466055F26D3A33A001F2C06 /* CryptoSchemeAesCtr.m */,
+				5466056426D3A33A001F2C06 /* EncryptionMaterials.h */,
+				5466056826D3A33A001F2C06 /* OSSCryptoHttpResponseParser.h */,
+				5466055A26D3A33A001F2C06 /* OSSCryptoHttpResponseParser.m */,
+				5466056226D3A33A001F2C06 /* OSSEncryptionClient.h */,
+				5466057026D3A33A001F2C06 /* OSSEncryptionClient.m */,
+				547052C7278BDB3F00A98E7D /* CryptoModule.h */,
+				547052C8278BDB3F00A98E7D /* CryptoModule.m */,
+				5466056326D3A33A001F2C06 /* CipherInputStream.h */,
+				5466056F26D3A33A001F2C06 /* CipherInputStream.m */,
+				5466055B26D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.h */,
+				5466056726D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.m */,
+				5466056A26D3A33A001F2C06 /* MultipartUploadCryptoContext.h */,
+				5466055E26D3A33A001F2C06 /* MultipartUploadCryptoContext.m */,
+				5441490026FD6EE100081F1D /* OSSEncryptUASettingInterceptor.h */,
+				5441490126FD6EE100081F1D /* OSSEncryptUASettingInterceptor.m */,
+			);
+			path = crypto;
+			sourceTree = "<group>";
+		};
 		D842D59D1FFCB82E00220913 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -420,6 +527,7 @@
 				D8C5E53F1FCE914F00613BA5 /* aos_crc64.h */,
 				D827B40921107169003A24F6 /* NSDate+OSS.h */,
 				D827B40A21107169003A24F6 /* NSDate+OSS.m */,
+				5466055926D3A33A001F2C06 /* crypto */,
 				D8C5E54B1FCEB57600613BA5 /* NSMutableData+OSS_CRC.h */,
 				D8C5E54C1FCEB57600613BA5 /* NSMutableData+OSS_CRC.m */,
 				D827B40F21114E4B003A24F6 /* NSMutableDictionary+OSS.h */,
@@ -549,14 +657,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8C41B1A1FCC2FD20091699B /* OSSModel.h in Headers */,
+				5466059126D3A33A001F2C06 /* MultipartUploadCryptoContext.h in Headers */,
 				D8C41B1D1FCC2FD20091699B /* OSSCompat.h in Headers */,
 				D8C41B1F1FCC2FD20091699B /* OSSUtil.h in Headers */,
 				D8C41B201FCC2FD20091699B /* OSSXMLDictionary.h in Headers */,
 				D8C41B211FCC2FD20091699B /* OSSClient.h in Headers */,
 				D8C41B231FCC2FD20091699B /* OSSHttpdns.h in Headers */,
 				D8C41B241FCC2FD20091699B /* OSSNetworking.h in Headers */,
+				5466057526D3A33A001F2C06 /* Cryptor.h in Headers */,
 				D8C41B251FCC2FD20091699B /* OSSIPv6Adapter.h in Headers */,
 				D8C41B261FCC2FD20091699B /* OSSReachabilityManager.h in Headers */,
+				547052C9278BDB3F00A98E7D /* CryptoModule.h in Headers */,
 				D8C41B2A1FCC2FD20091699B /* OSSIPv6PrefixResolver.h in Headers */,
 				D8C41B2B1FCC2FD20091699B /* OSSDefine.h in Headers */,
 				D8C41B2D1FCC2FD20091699B /* OSSLog.h in Headers */,
@@ -565,24 +676,32 @@
 				D8C41B351FCC2FD20091699B /* OSSCancellationTokenRegistration.h in Headers */,
 				D8C41B361FCC2FD20091699B /* OSSBolts.h in Headers */,
 				D829F3A91FD8CFBE00A8C2DC /* OSSInputStreamHelper.h in Headers */,
+				5466058526D3A33A001F2C06 /* EncryptionMaterials.h in Headers */,
 				D8C41B371FCC2FD20091699B /* OSSTask.h in Headers */,
 				D8C41B381FCC2FD20091699B /* OSSTaskCompletionSource.h in Headers */,
 				D8C41B3B1FCC2FD20091699B /* OSSCancellationToken.h in Headers */,
 				D85277EB2015BBAD00D7B1DE /* OSSRequest.h in Headers */,
+				5466057D26D3A33A001F2C06 /* CryptoConfiguration.h in Headers */,
 				D85277F82015CB3500D7B1DE /* OSSAllRequestNeededMessage.h in Headers */,
 				D85278102015DF4900D7B1DE /* OSSConstants.h in Headers */,
 				D85278042015D58400D7B1DE /* OSSHttpResponseParser.h in Headers */,
 				D85277F12015BD5A00D7B1DE /* OSSNetworkingRequestDelegate.h in Headers */,
+				5466057726D3A33A001F2C06 /* CryptoScheme.h in Headers */,
+				5466059526D3A33A001F2C06 /* ContentCryptoMaterial.h in Headers */,
+				5466058D26D3A33A001F2C06 /* OSSCryptoHttpResponseParser.h in Headers */,
 				D852780A2015D59000D7B1DE /* OSSURLRequestRetryHandler.h in Headers */,
 				D8C41B3D1FCC2FD20091699B /* OSSLogMacros.h in Headers */,
 				D8C41B3E1FCC2FD20091699B /* OSSNSLogger.h in Headers */,
 				D842D5A81FFCBA2800220913 /* AliyunOSSiOS.h in Headers */,
 				D8C41B3F1FCC2FD20091699B /* OSSReachability.h in Headers */,
+				5466058F26D3A33A001F2C06 /* CryptoSchemeAesCtr.h in Headers */,
 				D80C88CF201AC21200F379D8 /* OSSResult.h in Headers */,
 				D80C88C9201AC1B400F379D8 /* OSSGetObjectACLRequest.h in Headers */,
 				D80C88ED201B06E200F379D8 /* OSSDeleteMultipleObjectsResult.h in Headers */,
 				D80C88E7201B06CF00F379D8 /* OSSDeleteMultipleObjectsRequest.h in Headers */,
+				5441490226FD6EE100081F1D /* OSSEncryptUASettingInterceptor.h in Headers */,
 				D80C88D5201AC33000F379D8 /* OSSGetObjectACLResult.h in Headers */,
+				5466058326D3A33A001F2C06 /* CipherInputStream.h in Headers */,
 				D827B4292111A853003A24F6 /* OSSRestoreObjectResult.h in Headers */,
 				D827B4172111A6E4003A24F6 /* OSSPutSymlinkRequest.h in Headers */,
 				D827B42F2111ADE9003A24F6 /* OSSPutSymlinkResult.h in Headers */,
@@ -595,6 +714,8 @@
 				D8C41B411FCC2FD20091699B /* OSSFileLogger.h in Headers */,
 				D827B41121114E4B003A24F6 /* NSMutableDictionary+OSS.h in Headers */,
 				D8C5E54D1FCEB57600613BA5 /* NSMutableData+OSS_CRC.h in Headers */,
+				5466058126D3A33A001F2C06 /* OSSEncryptionClient.h in Headers */,
+				5466057326D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.h in Headers */,
 				D8C41B441FCC2FD20091699B /* OSSDDLog.h in Headers */,
 				D8C41B451FCC2FD20091699B /* OSSCocoaLumberjack.h in Headers */,
 				D8C5E5411FCE915000613BA5 /* aos_crc64.h in Headers */,
@@ -607,14 +728,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				D80C81FB1FC82541008E3900 /* OSSModel.h in Headers */,
+				5466059226D3A33A001F2C06 /* MultipartUploadCryptoContext.h in Headers */,
 				D80C81FE1FC8254D008E3900 /* OSSXMLDictionary.h in Headers */,
 				D80C81FF1FC82554008E3900 /* OSSClient.h in Headers */,
 				D80C82021FC8255B008E3900 /* OSSNetworking.h in Headers */,
 				D80C82131FC82596008E3900 /* OSSIPv6Adapter.h in Headers */,
 				D80C82141FC82599008E3900 /* OSSReachabilityManager.h in Headers */,
 				D80C82051FC82567008E3900 /* OSSService.h in Headers */,
+				5466057626D3A33A001F2C06 /* Cryptor.h in Headers */,
 				D80C82041FC82562008E3900 /* OSSLog.h in Headers */,
 				D80C82151FC8259C008E3900 /* OSSIPv6PrefixResolver.h in Headers */,
+				547052CA278BDB3F00A98E7D /* CryptoModule.h in Headers */,
 				D80C82061FC8256D008E3900 /* OSSLogMacros.h in Headers */,
 				D80C82081FC82571008E3900 /* OSSReachability.h in Headers */,
 				D80C82101FC82588008E3900 /* OSSTask.h in Headers */,
@@ -623,24 +747,32 @@
 				D80C820E1FC82584008E3900 /* OSSCancellationTokenRegistration.h in Headers */,
 				D80C82111FC8258B008E3900 /* OSSTaskCompletionSource.h in Headers */,
 				D829F3AA1FD8CFBE00A8C2DC /* OSSInputStreamHelper.h in Headers */,
+				5466058626D3A33A001F2C06 /* EncryptionMaterials.h in Headers */,
 				D80C820F1FC82586008E3900 /* OSSBolts.h in Headers */,
 				D80C820D1FC82581008E3900 /* OSSExecutor.h in Headers */,
 				D80C820B1FC82579008E3900 /* OSSCocoaLumberjack.h in Headers */,
 				D85277EC2015BBAD00D7B1DE /* OSSRequest.h in Headers */,
+				5466057E26D3A33A001F2C06 /* CryptoConfiguration.h in Headers */,
 				D85277F92015CB3500D7B1DE /* OSSAllRequestNeededMessage.h in Headers */,
 				D85278112015DF4900D7B1DE /* OSSConstants.h in Headers */,
 				D85278052015D58400D7B1DE /* OSSHttpResponseParser.h in Headers */,
 				D85277F22015BD5A00D7B1DE /* OSSNetworkingRequestDelegate.h in Headers */,
+				5466057826D3A33A001F2C06 /* CryptoScheme.h in Headers */,
+				5466059626D3A33A001F2C06 /* ContentCryptoMaterial.h in Headers */,
+				5466058E26D3A33A001F2C06 /* OSSCryptoHttpResponseParser.h in Headers */,
 				D852780B2015D59000D7B1DE /* OSSURLRequestRetryHandler.h in Headers */,
 				D80C820A1FC82577008E3900 /* OSSDDLog.h in Headers */,
 				D80C82091FC82574008E3900 /* OSSFileLogger.h in Headers */,
 				D80C82071FC8256F008E3900 /* OSSNSLogger.h in Headers */,
 				D80C82031FC8255F008E3900 /* OSSDefine.h in Headers */,
+				5466059026D3A33A001F2C06 /* CryptoSchemeAesCtr.h in Headers */,
 				D80C88D0201AC21200F379D8 /* OSSResult.h in Headers */,
 				D80C88CA201AC1B400F379D8 /* OSSGetObjectACLRequest.h in Headers */,
 				D80C88D6201AC33000F379D8 /* OSSGetObjectACLResult.h in Headers */,
 				D80C88EE201B06E200F379D8 /* OSSDeleteMultipleObjectsResult.h in Headers */,
+				5441490326FD6EE100081F1D /* OSSEncryptUASettingInterceptor.h in Headers */,
 				D827B42A2111A853003A24F6 /* OSSRestoreObjectResult.h in Headers */,
+				5466058426D3A33A001F2C06 /* CipherInputStream.h in Headers */,
 				D827B4182111A6E4003A24F6 /* OSSPutSymlinkRequest.h in Headers */,
 				D827B4302111ADE9003A24F6 /* OSSPutSymlinkResult.h in Headers */,
 				D827B4242111A71B003A24F6 /* OSSRestoreObjectRequest.h in Headers */,
@@ -653,6 +785,8 @@
 				D827B40C21107169003A24F6 /* NSDate+OSS.h in Headers */,
 				D842D5A91FFCBA2800220913 /* AliyunOSSiOS.h in Headers */,
 				D827B41221114E4B003A24F6 /* NSMutableDictionary+OSS.h in Headers */,
+				5466058226D3A33A001F2C06 /* OSSEncryptionClient.h in Headers */,
+				5466057426D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.h in Headers */,
 				D8C5E54E1FCEB57600613BA5 /* NSMutableData+OSS_CRC.h in Headers */,
 				D80C81FD1FC82549008E3900 /* OSSUtil.h in Headers */,
 				D8C5E5421FCE915000613BA5 /* aos_crc64.h in Headers */,
@@ -801,6 +935,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5466057126D3A33A001F2C06 /* OSSCryptoHttpResponseParser.m in Sources */,
+				5466058926D3A33A001F2C06 /* Cryptor.m in Sources */,
 				D85277F32015BD5A00D7B1DE /* OSSNetworkingRequestDelegate.m in Sources */,
 				D8C5E5431FCE915000613BA5 /* aos_crc64.c in Sources */,
 				D8C41AE61FCC2F920091699B /* OSSNetworking.m in Sources */,
@@ -809,9 +945,11 @@
 				D8C41AE71FCC2F920091699B /* OSSHttpdns.m in Sources */,
 				D8C41AE91FCC2F920091699B /* OSSClient.m in Sources */,
 				D80C88D7201AC33000F379D8 /* OSSGetObjectACLResult.m in Sources */,
+				5466058B26D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.m in Sources */,
 				D827B40D21107169003A24F6 /* NSDate+OSS.m in Sources */,
 				D8C41AEC1FCC2F920091699B /* OSSLog.m in Sources */,
 				D827B4252111A71B003A24F6 /* OSSRestoreObjectRequest.m in Sources */,
+				5466059326D3A33A001F2C06 /* CryptoScheme.m in Sources */,
 				D8C41AF01FCC2F920091699B /* OSSModel.m in Sources */,
 				D8C41AF51FCC2F920091699B /* OSSIPv6PrefixResolver.m in Sources */,
 				D85278062015D58400D7B1DE /* OSSHttpResponseParser.m in Sources */,
@@ -823,9 +961,13 @@
 				D8C41AFC1FCC2F920091699B /* OSSCancellationTokenRegistration.m in Sources */,
 				D8C41AFD1FCC2F920091699B /* OSSBolts.m in Sources */,
 				D8C41AFF1FCC2F920091699B /* OSSTaskCompletionSource.m in Sources */,
+				5466057F26D3A33A001F2C06 /* ContentCryptoMaterial.m in Sources */,
 				D8C2951420F46A79008A08AA /* OSSGetBucketInfoRequest.m in Sources */,
+				547052CB278BDB3F00A98E7D /* CryptoModule.m in Sources */,
 				D827B42B2111A853003A24F6 /* OSSRestoreObjectResult.m in Sources */,
+				5466057B26D3A33A001F2C06 /* CryptoSchemeAesCtr.m in Sources */,
 				D8C41B001FCC2F920091699B /* OSSTask.m in Sources */,
+				5466057926D3A33A001F2C06 /* MultipartUploadCryptoContext.m in Sources */,
 				D8C41B011FCC2F920091699B /* OSSCancellationToken.m in Sources */,
 				D8C41B071FCC2F920091699B /* OSSCancellationTokenSource.m in Sources */,
 				D8C41B081FCC2F920091699B /* OSSExecutor.m in Sources */,
@@ -841,12 +983,16 @@
 				D80C88CB201AC1B400F379D8 /* OSSGetObjectACLRequest.m in Sources */,
 				D8C41B0E1FCC2F920091699B /* OSSDDLog.m in Sources */,
 				D8C2951A20F46A95008A08AA /* OSSGetBucketInfoResult.m in Sources */,
+				5466059B26D3A33A001F2C06 /* CipherInputStream.m in Sources */,
 				D8C41B101FCC2F920091699B /* OSSReachability.m in Sources */,
+				5466059D26D3A33A001F2C06 /* OSSEncryptionClient.m in Sources */,
 				D8C41B111FCC2F920091699B /* OSSNSLogger.m in Sources */,
 				D85277FA2015CB3500D7B1DE /* OSSAllRequestNeededMessage.m in Sources */,
 				D829F3AB1FD8CFBE00A8C2DC /* OSSInputStreamHelper.m in Sources */,
 				D8C41B141FCC2F920091699B /* OSSFileLogger.m in Sources */,
 				D8C41B161FCC2F920091699B /* OSSUtil.m in Sources */,
+				5441490426FD6EE100081F1D /* OSSEncryptUASettingInterceptor.m in Sources */,
+				5466059726D3A33A001F2C06 /* CryptoConfiguration.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -854,6 +1000,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5466057226D3A33A001F2C06 /* OSSCryptoHttpResponseParser.m in Sources */,
+				5466058A26D3A33A001F2C06 /* Cryptor.m in Sources */,
 				D85277F42015BD5A00D7B1DE /* OSSNetworkingRequestDelegate.m in Sources */,
 				D8C5E5441FCE915000613BA5 /* aos_crc64.c in Sources */,
 				D8C41AA71FCC284F0091699B /* OSSNetworking.m in Sources */,
@@ -862,9 +1010,11 @@
 				D8C41AA81FCC284F0091699B /* OSSHttpdns.m in Sources */,
 				D8C41AAA1FCC284F0091699B /* OSSClient.m in Sources */,
 				D80C88D8201AC33000F379D8 /* OSSGetObjectACLResult.m in Sources */,
+				5466058C26D3A33A001F2C06 /* OSSSimpleRSAEncryptionMaterials.m in Sources */,
 				D827B40E21107169003A24F6 /* NSDate+OSS.m in Sources */,
 				D8C41AAD1FCC284F0091699B /* OSSLog.m in Sources */,
 				D827B4262111A71B003A24F6 /* OSSRestoreObjectRequest.m in Sources */,
+				5466059426D3A33A001F2C06 /* CryptoScheme.m in Sources */,
 				D8C41AB11FCC284F0091699B /* OSSModel.m in Sources */,
 				D8C41AB61FCC284F0091699B /* OSSIPv6PrefixResolver.m in Sources */,
 				D85278072015D58400D7B1DE /* OSSHttpResponseParser.m in Sources */,
@@ -876,9 +1026,13 @@
 				D8C41ABD1FCC284F0091699B /* OSSCancellationTokenRegistration.m in Sources */,
 				D8C41ABE1FCC284F0091699B /* OSSBolts.m in Sources */,
 				D8C41AC01FCC284F0091699B /* OSSTaskCompletionSource.m in Sources */,
+				5466058026D3A33A001F2C06 /* ContentCryptoMaterial.m in Sources */,
 				D8C2951520F46A79008A08AA /* OSSGetBucketInfoRequest.m in Sources */,
+				547052CC278BDB3F00A98E7D /* CryptoModule.m in Sources */,
 				D827B42C2111A853003A24F6 /* OSSRestoreObjectResult.m in Sources */,
+				5466057C26D3A33A001F2C06 /* CryptoSchemeAesCtr.m in Sources */,
 				D8C41AC11FCC284F0091699B /* OSSTask.m in Sources */,
+				5466057A26D3A33A001F2C06 /* MultipartUploadCryptoContext.m in Sources */,
 				D8C41AC21FCC284F0091699B /* OSSCancellationToken.m in Sources */,
 				D8C41AC81FCC28500091699B /* OSSCancellationTokenSource.m in Sources */,
 				D8C41AC91FCC28500091699B /* OSSExecutor.m in Sources */,
@@ -894,12 +1048,16 @@
 				D80C88CC201AC1B400F379D8 /* OSSGetObjectACLRequest.m in Sources */,
 				D8C41ACF1FCC28500091699B /* OSSDDLog.m in Sources */,
 				D8C2951B20F46A95008A08AA /* OSSGetBucketInfoResult.m in Sources */,
+				5466059C26D3A33A001F2C06 /* CipherInputStream.m in Sources */,
 				D8C41AD11FCC28500091699B /* OSSReachability.m in Sources */,
+				5466059E26D3A33A001F2C06 /* OSSEncryptionClient.m in Sources */,
 				D8C41AD21FCC28500091699B /* OSSNSLogger.m in Sources */,
 				D85277FB2015CB3500D7B1DE /* OSSAllRequestNeededMessage.m in Sources */,
 				D829F3AC1FD8CFBE00A8C2DC /* OSSInputStreamHelper.m in Sources */,
 				D8C41AD51FCC28500091699B /* OSSFileLogger.m in Sources */,
 				D8C41AD71FCC28500091699B /* OSSUtil.m in Sources */,
+				5441490526FD6EE100081F1D /* OSSEncryptUASettingInterceptor.m in Sources */,
+				5466059826D3A33A001F2C06 /* CryptoConfiguration.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,6 +13,7 @@
 @class OSSAllRequestNeededMessage;
 @class OSSURLRequestRetryHandler;
 @class OSSHttpResponseParser;
+@class CipherInputStream;
 
 /**
  The proxy object class for each OSS request.
@@ -33,6 +34,7 @@
 
 @property (nonatomic, strong) NSData * uploadingData;
 @property (nonatomic, strong) NSURL * uploadingFileURL;
+@property (nonatomic, strong) NSInputStream * uploadingInputStream;
 
 @property (nonatomic, assign) int64_t payloadTotalBytesWritten;
 

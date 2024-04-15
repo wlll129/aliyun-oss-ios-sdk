@@ -33,8 +33,21 @@
 #import "OSSRestoreObjectResult.h"
 
 #import "OSSClient.h"
+
+#import "CryptoConfiguration.h"
 #import "OSSModel.h"
 #import "OSSUtil.h"
 #import "OSSLog.h"
+
+#import "OSSEncryptionClient.h"
+#import "OSSSimpleRSAEncryptionMaterials.h"
+#import "OSSCryptoHttpResponseParser.h"
+#import "CryptoConfiguration.h"
+#import "CryptoScheme.h"
+#import "CryptoSchemeAesCtr.h"
+#import "ContentCryptoMaterial.h"
+#import "CipherInputStream.h"
+#import "MultipartUploadCryptoContext.h"
+#import "Cryptor.h"
 
 #import "OSSBolts.h"

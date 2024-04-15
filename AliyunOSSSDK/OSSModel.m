@@ -507,6 +507,11 @@ NSString * const BACKGROUND_SESSION_IDENTIFIER = @"com.aliyun.oss.backgroundsess
 
 @implementation OSSRange
 
+- (id)copyWithZone:(nullable NSZone *)zone {
+    OSSRange *range = [[OSSRange alloc] initWithStart:self.startPosition withEnd:self.endPosition];
+    return range;
+}
+
 - (instancetype)initWithStart:(int64_t)start withEnd:(int64_t)end {
     if (self = [super init]) {
         self.startPosition = start;
