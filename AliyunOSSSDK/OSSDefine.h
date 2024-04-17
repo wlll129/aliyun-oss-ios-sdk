@@ -16,7 +16,7 @@
 #elif TARGET_OS_OSX
 #define OSSUAPrefix                             @"aliyun-sdk-mac"
 #endif
-#define OSSSDKVersion                           @"2.10.10"
+#define OSSSDKVersion                           @"2.10.20"
 #define OSSUserAgentSuffix                      @"/OSSEncryptionClient"
 
 #define OSSListBucketResultXMLTOKEN             @"ListBucketResult"
@@ -92,5 +92,6 @@
 #define OSSDefaultMaxConcurrentNum              5
 #define OSSDefaultTimeoutForRequestInSecond     15
 #define OSSDefaultTimeoutForResourceInSecond    7 * 24 * 60 * 60
+#define OSSDefaultThreadNum                     5
 
 #endif /* OSSDefine_h */

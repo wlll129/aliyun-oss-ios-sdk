@@ -10,6 +10,7 @@
 #import "OSSTestMacros.h"
 #import <AliyunOSSiOS/AliyunOSSiOS.h>
 #import "OSSTestUtils.h"
+#import <AliyunOSSiOS/OSSDefine.h>
 
 #define SCHEME @"https://"
 #define ENDPOINT @"oss-cn-hangzhou.aliyuncs.com"
@@ -18,6 +19,14 @@
 #define CUSTOMPATH(endpoint) [endpoint stringByAppendingString:@"/path"]
 #define BUCKET_NAME @"BucketName"
 #define OBJECT_KEY @"ObjectKey"
+
+
+@interface OSSClient(Test)
+
+- (NSUInteger)judgePartSizeForMultipartRequest:(OSSMultipartUploadRequest *)request fileSize:(unsigned long long)fileSize;
+- (NSUInteger)ceilPartSize:(NSUInteger)partSize;
+
+@end
 
 @interface OSSObjectTests : XCTestCase
 {
@@ -138,9 +147,10 @@
     
     request.uploadingData = [readFile readDataToEndOfFile];
     request.objectMeta = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"value1", @"x-oss-meta-name1", nil];
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     request.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
-        
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     
     OSSTask * task = [_client putObject:request];
@@ -148,6 +158,7 @@
         XCTAssertNil(task.error);
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 - (void)testAPI_putObjectFromFile
@@ -166,8 +177,10 @@
 //  在统一config 中修改
 //        request.crcFlag = OSSRequestCRCOpen;
         
+        OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
         request.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
             NSLog(@"bytesSent: %lld, totalByteSent: %lld, totalBytesExpectedToSend: %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+            [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
         };
         
         OSSTask * task = [_client putObject:request];
@@ -179,6 +192,7 @@
             XCTAssertTrue(isEqual);
             return nil;
         }] waitUntilFinished];
+        XCTAssertTrue([progressTest completeValidateProgress]);
     }
 }
 
@@ -219,8 +233,10 @@
 //    request.crcFlag = OSSRequestCRCOpen;
     request.uploadingData = [readFile readDataToEndOfFile];
     request.objectMeta = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"value1", @"x-oss-meta-name1", nil];
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     request.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"bytesSent: %lld, totalByteSent: %lld, totalBytesExpectedToSend: %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     
     request.contentType = @"";
@@ -230,6 +246,7 @@
         XCTAssertNil(task.error);
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
     
     OSSHeadObjectRequest * head = [OSSHeadObjectRequest new];
     head.bucketName = _privateBucketName;
@@ -262,8 +279,10 @@
     request.uploadingData = [readFile readDataToEndOfFile];
     request.contentType = @"application/special";
     request.objectMeta = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"value1", @"x-oss-meta-name1", nil];
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     request.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     
     OSSTask * task = [_client putObject:request];
@@ -276,6 +295,7 @@
         XCTAssertEqual(200, result.httpResponseCode);
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
     
     OSSHeadObjectRequest * head = [OSSHeadObjectRequest new];
     head.bucketName = _privateBucketName;
@@ -311,8 +331,10 @@
                             @"var1": @"value1",
                             @"var2": @"value2"
                             };
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     request.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     
     OSSTask * task = [_client putObject:request];
@@ -320,6 +342,7 @@
         XCTAssertNil(task.error);
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 - (void)testAPI_putObjectACL
@@ -373,8 +396,10 @@
     request.objectKey = @"appendObject";
     request.appendPosition = 0;
     request.uploadingFileURL = [NSURL fileURLWithPath:filePath];
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     request.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     
     __block int64_t nextAppendPosition = 0;
@@ -387,13 +412,16 @@
         lastCrc64ecma = result.remoteCRC64ecma;
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
     
     request.bucketName = _privateBucketName;
     request.objectKey = @"appendObject";
     request.appendPosition = nextAppendPosition;
     request.uploadingFileURL = [NSURL fileURLWithPath:filePath];
+    progressTest = [OSSProgressTestUtils new];
     request.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     
     task = [_client appendObject:request withCrc64ecma:lastCrc64ecma];
@@ -401,6 +429,7 @@
         XCTAssertNil(task.error);
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 #pragma mark - getObject
@@ -776,6 +805,99 @@
     [OSSTestUtils cleanBucket:bucketName with:_client];
 }
 
+#pragma mark - Tagging
+
+- (void)testAPI_put_tagging {
+    NSDictionary *tags = @{@"key1":@"value1", @"key2":@"value2"};
+    OSSPutObjectTaggingRequest *putTaggingRequest = [OSSPutObjectTaggingRequest new];
+    putTaggingRequest.bucketName = _privateBucketName;
+    putTaggingRequest.objectKey = OSS_IMAGE_KEY;
+    putTaggingRequest.tags = tags;
+    [[[_client putObjectTagging:putTaggingRequest] continueWithBlock:^id _Nullable(OSSTask * _Nonnull task) {
+        XCTAssertNil(task.error);
+        return nil;
+    }] waitUntilFinished];
+    
+    OSSGetObjectTaggingRequest *getTaggingRequest = [OSSGetObjectTaggingRequest new];
+    getTaggingRequest.bucketName = _privateBucketName;
+    getTaggingRequest.objectKey = OSS_IMAGE_KEY;
+    [[[_client getObjectTagging:getTaggingRequest] continueWithBlock:^id _Nullable(OSSTask * _Nonnull task) {
+        XCTAssertNil(task.error);
+        OSSGetObjectTaggingResult *result = task.result;
+        for (NSString *key in [tags allKeys]) {
+            XCTAssertTrue([tags[key] isEqualToString:result.tags[key]]);
+        }
+        return nil;
+    }] waitUntilFinished];
+    
+    OSSDeleteObjectTaggingRequest *deleteTaggingRequest = [OSSDeleteObjectTaggingRequest new];
+    deleteTaggingRequest.bucketName = _privateBucketName;
+    deleteTaggingRequest.objectKey = OSS_IMAGE_KEY;
+    [[[_client deleteObjectTagging:deleteTaggingRequest] continueWithBlock:^id _Nullable(OSSTask * _Nonnull task) {
+        XCTAssertNil(task.error);
+        return nil;
+    }] waitUntilFinished];
+    
+    getTaggingRequest = [OSSGetObjectTaggingRequest new];
+    getTaggingRequest.bucketName = _privateBucketName;
+    getTaggingRequest.objectKey = OSS_IMAGE_KEY;
+    [[[_client getObjectTagging:getTaggingRequest] continueWithBlock:^id _Nullable(OSSTask * _Nonnull task) {
+        XCTAssertNil(task.error);
+        OSSGetObjectTaggingResult *result = task.result;
+        XCTAssertTrue([[result.tags allKeys] count] == 0);
+        return nil;
+    }] waitUntilFinished];
+}
+
+- (void)testAPI_null_tagging {
+    OSSPutObjectTaggingRequest *putTaggingRequest = [OSSPutObjectTaggingRequest new];
+    putTaggingRequest.bucketName = _privateBucketName;
+    putTaggingRequest.objectKey = OSS_IMAGE_KEY;
+    [[[_client putObjectTagging:putTaggingRequest] continueWithBlock:^id _Nullable(OSSTask * _Nonnull task) {
+        XCTAssertNil(task.error);
+        return nil;
+    }] waitUntilFinished];
+    
+    OSSGetObjectTaggingRequest *getTaggingRequest = [OSSGetObjectTaggingRequest new];
+    getTaggingRequest.bucketName = _privateBucketName;
+    getTaggingRequest.objectKey = OSS_IMAGE_KEY;
+    [[[_client getObjectTagging:getTaggingRequest] continueWithBlock:^id _Nullable(OSSTask * _Nonnull task) {
+        XCTAssertNil(task.error);
+        OSSGetObjectTaggingResult *result = task.result;
+        XCTAssertTrue([[result.tags allKeys] count] == 0);
+        return nil;
+    }] waitUntilFinished];
+    
+    OSSDeleteObjectTaggingRequest *deleteTaggingRequest = [OSSDeleteObjectTaggingRequest new];
+    deleteTaggingRequest.bucketName = _privateBucketName;
+    deleteTaggingRequest.objectKey = OSS_IMAGE_KEY;
+    [[[_client deleteObjectTagging:deleteTaggingRequest] continueWithBlock:^id _Nullable(OSSTask * _Nonnull task) {
+        XCTAssertNil(task.error);
+        return nil;
+    }] waitUntilFinished];
+    
+}
+
+- (void)testAPI_deleteNotExistObjectTagging {
+    OSSDeleteObjectTaggingRequest *deleteTaggingRequest = [OSSDeleteObjectTaggingRequest new];
+    deleteTaggingRequest.bucketName = _privateBucketName;
+    deleteTaggingRequest.objectKey = OSS_IMAGE_KEY;
+    [[[_client deleteObjectTagging:deleteTaggingRequest] continueWithBlock:^id _Nullable(OSSTask * _Nonnull task) {
+        XCTAssertNil(task.error);
+        return nil;
+    }] waitUntilFinished];
+    
+    deleteTaggingRequest = [OSSDeleteObjectTaggingRequest new];
+    deleteTaggingRequest.bucketName = _privateBucketName;
+    deleteTaggingRequest.objectKey = @"existObject";
+    [[[_client deleteObjectTagging:deleteTaggingRequest] continueWithBlock:^id _Nullable(OSSTask * _Nonnull task) {
+        XCTAssertNotNil(task.error);
+        XCTAssertEqual(task.error.code, -404);
+        return nil;
+    }] waitUntilFinished];
+}
+
+
 #pragma mark - others
 
 - (void)testAPI_get_Bucket_list_Objects
@@ -995,8 +1117,10 @@
     request.uploadingData = [readFile readDataToEndOfFile];
     request.contentMd5 = [OSSUtil base64Md5ForData:request.uploadingData];
     request.objectMeta = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"value1", @"x-oss-meta-name1", nil];
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     request.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     request.uploadRetryCallback = ^{
         NSLog(@"put object call retry");
@@ -1007,7 +1131,8 @@
         XCTAssertNil(task.error);
         return nil;
     }] waitUntilFinished];
-    
+    XCTAssertTrue([progressTest completeValidateProgress]);
+
     BOOL isEqual = [self checkMd5WithBucketName:_privateBucketName
                                       objectKey:fileName
                                   localFilePath:filePath];
@@ -1052,8 +1177,10 @@
     request.uploadingData = [readFile readDataToEndOfFile];
     request.contentMd5 = [OSSUtil base64Md5ForData:request.uploadingData];
     request.objectMeta = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"value1", @"x-oss-meta-name1", nil];
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     request.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     
     OSSTask * task = [_client putObject:request];
@@ -1061,6 +1188,7 @@
         XCTAssertNil(task.error);
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 - (void)testAPI_putObjectWithCheckingFileMd5
@@ -1077,9 +1205,10 @@
     request.uploadingFileURL = fileURL;
     request.contentMd5 = [OSSUtil base64Md5ForFilePath:fileURL.path];
     request.objectMeta = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"value1", @"x-oss-meta-name1", nil];
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     request.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
-        
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     
     OSSTask * task = [_client putObject:request];
@@ -1087,6 +1216,7 @@
         XCTAssertNil(task.error);
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 - (void)testAPI_putObjectWithInvalidMd5
@@ -1103,8 +1233,10 @@
     request.uploadingFileURL = fileURL;
     request.contentMd5 = @"invliadmd5valuetotest";
     request.objectMeta = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"value1", @"x-oss-meta-name1", nil];
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     request.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
          NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     
     OSSTask * task = [_client putObject:request];
@@ -1113,6 +1245,7 @@
         XCTAssertEqual(-1 * 400, task.error.code);
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 - (void)testAPI_customExcludeCname
@@ -1176,8 +1309,8 @@
         cancelled = YES;
         return nil;
     }];
-    
-    [NSThread sleepForTimeInterval:1];
+
+    [NSThread sleepForTimeInterval:0.1];
     [request cancel];
     [NSThread sleepForTimeInterval:1];
     XCTAssertTrue(cancelled);
@@ -1205,7 +1338,7 @@
         return nil;
     }];
     
-    [NSThread sleepForTimeInterval:1];
+    [NSThread sleepForTimeInterval:0.1];
     [request cancel];
     [NSThread sleepForTimeInterval:1];
     XCTAssertTrue(completed);
@@ -1329,8 +1462,10 @@
     NSURL * fileURL = [NSURL fileURLWithPath:[docDir stringByAppendingPathComponent:@"file1m"]];
     
     request.uploadingFileURL = fileURL;
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     request.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     
     OSSTask * task = [_client putObject:request];
@@ -1339,6 +1474,7 @@
         XCTAssertEqual(OSSClientErrorCodeInvalidArgument, task.error.code);
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 - (void)testAPI_putObjectWithErrorOfInvalidKey
@@ -1351,8 +1487,10 @@
     NSURL * fileURL = [NSURL fileURLWithPath:[docDir stringByAppendingPathComponent:@"file1m"]];
     
     request.uploadingFileURL = fileURL;
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     request.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     
     OSSTask * task = [_client putObject:request];
@@ -1361,6 +1499,7 @@
         XCTAssertEqual(OSSClientErrorCodeInvalidArgument, task.error.code);
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 - (void)testAPI_getObjectWithErrorOfAccessDenied
@@ -1408,8 +1547,10 @@
     request.bucketName = _privateBucketName;
     request.objectKey = @"file1m";
     
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     request.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     
     OSSTask * task = [_client putObject:request];
@@ -1419,6 +1560,7 @@
         XCTAssertEqual(OSSClientErrorCodeInvalidArgument, task.error.code);
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 - (void)testAPI_putObjectWithErrorOfNoCredentialProvier
@@ -1435,8 +1577,10 @@
     
     request.uploadingData = [readFile readDataToEndOfFile];
     request.objectMeta = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"value1", @"x-oss-meta-name1", nil];
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     request.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     
     OSSTask * task = [tempClient putObject:request];
@@ -1448,7 +1592,8 @@
     
     task = [tempClient presignConstrainURLWithBucketName:_privateBucketName withObjectKey:@"file1m" withExpirationInterval:3600];
     [task waitUntilFinished];
-     XCTAssertTrue([OSSClientErrorDomain isEqualToString:task.error.domain]);
+    XCTAssertTrue([OSSClientErrorDomain isEqualToString:task.error.domain]);
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 #pragma mark - cname
@@ -1698,6 +1843,110 @@
     XCTAssertTrue([tk.result hasPrefix:urlString]);
 }
 
+- (void)testAPI_presignURLToPutObject {
+    NSString *filePath = [[NSString oss_documentDirectory] stringByAppendingPathComponent:_fileNames[3]];
+    NSString *bucketName = _privateBucketName;
+    NSString *objectKey = OBJECT_KEY;
+    NSString *method = @"PUT";
+    NSString *contentType = @"image/png";
+    NSString *contentMd5 = [OSSUtil base64Md5ForFilePath:filePath];
+
+    OSSTask *task = [_client presignConstrainURLWithBucketName:bucketName
+                                                 withObjectKey:objectKey
+                                                    httpMethod:method
+                                        withExpirationInterval:30 * 60
+                                                withParameters:@{}
+                                                   contentType:contentType
+                                                    contentMd5:contentMd5];
+
+    NSString *url = task.result;
+
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
+    request.HTTPMethod = method;
+    [request setValue:contentType forHTTPHeaderField:OSSHttpHeaderContentType];
+    [request setValue:contentMd5 forHTTPHeaderField:OSSHttpHeaderContentMD5];
+    NSURLSession *session = [NSURLSession sharedSession];
+    OSSTaskCompletionSource * tcs = [OSSTaskCompletionSource taskCompletionSource];
+    NSURLSessionTask *sesstionTask = [session uploadTaskWithRequest:request fromFile:[NSURL fileURLWithPath:filePath] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSHTTPURLResponse *httpResoponse = (NSHTTPURLResponse *)response;
+        if (!error && httpResoponse.statusCode == 200) {
+            NSLog(@"上传成功");
+            [tcs setError:error];
+        } else {
+            NSLog(@"上传失败 \n%@ \n%@", error, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+            [tcs setResult:data];
+        }
+    }];
+    [sesstionTask resume];
+    [tcs.task waitUntilFinished];
+    
+    BOOL isEqual = [self checkMd5WithBucketName:_privateBucketName
+                                      objectKey:OBJECT_KEY
+                                  localFilePath:filePath];
+    XCTAssertTrue(isEqual);
+}
+
+- (void)testAPI_presignURLWithHeaderTypeToPutObject {
+    NSString *filePath = [[NSString oss_documentDirectory] stringByAppendingPathComponent:_fileNames[3]];
+    NSString *bucketName = _privateBucketName;
+    NSString *objectKey = OBJECT_KEY;
+    NSString *method = @"PUT";
+    NSString *contentType = @"image/png";
+    NSString *contentMd5 = [OSSUtil base64Md5ForFilePath:filePath];
+    NSDictionary *headers = @{@"x-oss-meta-text-key": @"test-value",
+                              OSSHttpHeaderContentType: contentType,
+                              OSSHttpHeaderContentMD5: contentMd5};
+
+    OSSTask *task = [_client presignConstrainURLWithBucketName:bucketName
+                                                 withObjectKey:objectKey
+                                                    httpMethod:method
+                                        withExpirationInterval:30 * 60
+                                                withParameters:@{}
+                                                   withHeaders:headers];
+
+    NSString *url = task.result;
+
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
+    request.HTTPMethod = method;
+    [request setValue:contentType forHTTPHeaderField:@"Content-Type"];
+    [request setValue:contentMd5 forHTTPHeaderField:OSSHttpHeaderContentMD5];
+    [request setValue:@"test-value" forHTTPHeaderField:@"x-oss-meta-text-key"];
+    NSURLSession *session = [NSURLSession sharedSession];
+    OSSTaskCompletionSource * tcs = [OSSTaskCompletionSource taskCompletionSource];
+    NSURLSessionTask *sesstionTask = [session uploadTaskWithRequest:request fromFile:[NSURL fileURLWithPath:filePath] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSHTTPURLResponse *httpResoponse = (NSHTTPURLResponse *)response;
+        if (!error && httpResoponse.statusCode == 200) {
+            NSLog(@"上传成功");
+            [tcs setError:error];
+        } else {
+            NSLog(@"上传失败 \n%@ \n%@", error, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+            [tcs setResult:data];
+        }
+    }];
+    [sesstionTask resume];
+    [tcs.task waitUntilFinished];
+    
+    OSSHeadObjectRequest * head = [OSSHeadObjectRequest new];
+    head.bucketName = _privateBucketName;
+    head.objectKey = OBJECT_KEY;
+    [[[_client headObject:head] continueWithBlock:^id(OSSTask *task) {
+        XCTAssertNil(task.error);
+        OSSHeadObjectResult * headResult = task.result;
+        [headers enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            if (![key isEqualToString:OSSHttpHeaderContentMD5]) {
+                XCTAssertTrue([[headResult.objectMeta objectForKey:key] isEqualToString:obj]);
+            }
+        }];
+        return nil;
+    }] waitUntilFinished];
+    
+    BOOL isEqual = [self checkMd5WithBucketName:_privateBucketName
+                                      objectKey:OBJECT_KEY
+                                  localFilePath:filePath];
+    XCTAssertTrue(isEqual);
+}
+
+
 #pragma mark - utils
 
 - (BOOL)checkMd5WithBucketName:(nonnull NSString *)bucketName objectKey:(nonnull NSString *)objectKey localFilePath:(nonnull NSString *)filePath
@@ -1730,8 +1979,10 @@
     multipartUploadRequest.objectKey = OSS_MULTIPART_UPLOADKEY;
     multipartUploadRequest.contentType = @"application/octet-stream";
     multipartUploadRequest.partSize = 1024 * 1024;
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     multipartUploadRequest.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"progress: %lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     OSSTask * multipartTask = [_client multipartUpload:multipartUploadRequest];
     
@@ -1739,6 +1990,7 @@
         XCTAssertNotNil(task.error);
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 - (void)testAPI_multipartRequest_concurrently {
@@ -1753,14 +2005,17 @@
         multipartUploadRequest.contentType = @"application/octet-stream";
         multipartUploadRequest.uploadingFileURL = [NSURL fileURLWithPath:[[NSString oss_documentDirectory] stringByAppendingPathComponent:@"file5m"]];
         multipartUploadRequest.partSize = 256 * 1024;
+        OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
         multipartUploadRequest.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
             XCTAssertTrue(totalBytesExpectedToSend >= totalByteSent);
-        };
+            [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
+       };
         
         [queue addOperationWithBlock:^{
             OSSTask * task = [_client multipartUpload:multipartUploadRequest];
             [task waitUntilFinished];
             XCTAssertNotNil(task.result);
+            XCTAssertTrue([progressTest completeValidateProgress]);
         }];
     }
     [queue waitUntilAllOperationsAreFinished];
@@ -1773,8 +2028,11 @@
     multipartUploadRequest.objectKey = OSS_MULTIPART_UPLOADKEY;
     multipartUploadRequest.contentType = @"application/octet-stream";
     multipartUploadRequest.partSize = 1024 * 1024;
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     multipartUploadRequest.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
+        XCTAssertTrue(totalByteSent <= totalBytesExpectedToSend);
         NSLog(@"progress: %lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     multipartUploadRequest.uploadingFileURL = [NSURL URLWithString:@"http://www.alibaba-inc.com"];
     
@@ -1786,6 +2044,7 @@
         
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 - (void)testAPI_multipartRequestWithUnexistFileURL {
@@ -1795,8 +2054,10 @@
     multipartUploadRequest.objectKey = OSS_MULTIPART_UPLOADKEY;
     multipartUploadRequest.contentType = @"application/octet-stream";
     multipartUploadRequest.partSize = 1024 * 1024;
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     multipartUploadRequest.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"progress: %lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     NSString * docDir = [NSString oss_documentDirectory];
     multipartUploadRequest.uploadingFileURL = [NSURL fileURLWithPath:[docDir stringByAppendingPathComponent:@"unexistfile"]];
@@ -1807,6 +2068,7 @@
         XCTAssertNotNil(task.error);
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 - (void)testAPI_multipartRequestWithoutPartSize {
@@ -1816,8 +2078,10 @@
     multipartUploadRequest.objectKey = OSS_MULTIPART_UPLOADKEY;
     multipartUploadRequest.contentType = @"application/octet-stream";
     multipartUploadRequest.uploadingFileURL = [[NSBundle mainBundle] URLForResource:@"wangwang" withExtension:@"zip"];
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     multipartUploadRequest.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"progress: %lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     OSSTask * multipartTask = [_client multipartUpload:multipartUploadRequest];
     
@@ -1825,6 +2089,7 @@
         XCTAssertNil(task.error);
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 - (void)testAPI_multipartRequestWithoutObjectKey {
@@ -1835,8 +2100,10 @@
     multipartUploadRequest.partSize = 1024 * 1024;
     multipartUploadRequest.uploadingFileURL = [[NSBundle mainBundle] URLForResource:@"wangwang" withExtension:@"zip"];
     
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     multipartUploadRequest.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"progress: %lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     OSSTask * multipartTask = [_client multipartUpload:multipartUploadRequest];
     
@@ -1845,6 +2112,7 @@
         
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 - (void)testAPI_multipartRequestWithoutBucketName {
@@ -1854,8 +2122,10 @@
     multipartUploadRequest.objectKey = OSS_MULTIPART_UPLOADKEY;
     multipartUploadRequest.partSize = 1024 * 1024;
     multipartUploadRequest.uploadingFileURL = [[NSBundle mainBundle] URLForResource:@"wangwang" withExtension:@"zip"];
+    OSSProgressTestUtils *progressTest = [OSSProgressTestUtils new];
     multipartUploadRequest.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"progress: %lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
+        [progressTest updateTotalBytes:totalByteSent totalBytesExpected:totalBytesExpectedToSend];
     };
     OSSTask * multipartTask = [_client multipartUpload:multipartUploadRequest];
     
@@ -1864,6 +2134,7 @@
         
         return nil;
     }] waitUntilFinished];
+    XCTAssertTrue([progressTest completeValidateProgress]);
 }
 
 - (void)testAPI_dataTaskAndUploadTaskSimultaneously {
@@ -1964,6 +2235,84 @@
     [task waitUntilFinished];
     
     XCTAssertNotNil(task.error);
+}
+
+- (void)testAPI_judgePartSize {
+    NSInteger partSize = 100 * 1024;
+    NSInteger fileSize = partSize * 5001;
+    OSSMultipartUploadRequest *multipartUploadRequest = [OSSMultipartUploadRequest new];
+    multipartUploadRequest.partSize = partSize;
+    
+    NSInteger partCount = [_client judgePartSizeForMultipartRequest:multipartUploadRequest fileSize:fileSize];
+    NSInteger expectPartCount = fileSize / multipartUploadRequest.partSize;
+    expectPartCount += fileSize % multipartUploadRequest.partSize > 0 ? 1 : 0;
+    XCTAssertEqual(partCount, expectPartCount);
+    XCTAssertEqual(0, multipartUploadRequest.partSize % (4 * 1024));
+
+    fileSize = partSize * 5000;
+    multipartUploadRequest.partSize = partSize;
+    partCount = [_client judgePartSizeForMultipartRequest:multipartUploadRequest fileSize:fileSize];
+    expectPartCount = fileSize / multipartUploadRequest.partSize;
+    expectPartCount += fileSize % multipartUploadRequest.partSize > 0 ? 1 : 0;
+    XCTAssertEqual(partCount, expectPartCount);
+    XCTAssertEqual(5000, expectPartCount);
+
+    fileSize = partSize * 4999;
+    multipartUploadRequest.partSize = partSize;
+    partCount = [_client judgePartSizeForMultipartRequest:multipartUploadRequest fileSize:fileSize];
+    expectPartCount = fileSize / multipartUploadRequest.partSize;
+    expectPartCount += fileSize % multipartUploadRequest.partSize > 0 ? 1 : 0;
+    XCTAssertEqual(partCount, expectPartCount);
+    XCTAssertEqual(4999, expectPartCount);
+
+    fileSize = partSize * 1 + 1;
+    multipartUploadRequest.partSize = partSize;
+    partCount = [_client judgePartSizeForMultipartRequest:multipartUploadRequest fileSize:fileSize];
+    expectPartCount = fileSize / multipartUploadRequest.partSize;
+    expectPartCount += fileSize % multipartUploadRequest.partSize > 0 ? 1 : 0;
+    XCTAssertEqual(partCount, expectPartCount);
+    XCTAssertEqual(2, expectPartCount);
+    
+    fileSize = partSize * 1;
+    multipartUploadRequest.partSize = partSize;
+    partCount = [_client judgePartSizeForMultipartRequest:multipartUploadRequest fileSize:fileSize];
+    expectPartCount = fileSize / multipartUploadRequest.partSize;
+    expectPartCount += fileSize % multipartUploadRequest.partSize > 0 ? 1 : 0;
+    XCTAssertEqual(partCount, expectPartCount);
+    XCTAssertEqual(1, expectPartCount);
+
+    fileSize = 1;
+    multipartUploadRequest.partSize = partSize;
+    partCount = [_client judgePartSizeForMultipartRequest:multipartUploadRequest fileSize:fileSize];
+    expectPartCount = fileSize / multipartUploadRequest.partSize;
+    expectPartCount += fileSize % multipartUploadRequest.partSize > 0 ? 1 : 0;
+    XCTAssertEqual(partCount, expectPartCount);
+    XCTAssertEqual(1, expectPartCount);
+    
+    
+    fileSize = 200 * 1024 * 4999;
+    multipartUploadRequest.partSize = partSize;
+    partCount = [_client judgePartSizeForMultipartRequest:multipartUploadRequest fileSize:fileSize];
+    expectPartCount = fileSize / multipartUploadRequest.partSize;
+    expectPartCount += fileSize % multipartUploadRequest.partSize > 0 ? 1 : 0;
+    XCTAssertEqual(partCount, expectPartCount);
+    XCTAssertEqual(4999, expectPartCount);
+}
+
+- (void)testAPI_ceilPartSize {
+    
+    NSUInteger partSizeAlign = 4 * 1024;
+    NSUInteger partSize = 1;
+    partSize = [_client ceilPartSize:partSize];
+    XCTAssertEqual(partSizeAlign, partSize);
+
+    partSize = 4 * 1024;
+    partSize = [_client ceilPartSize:partSize];
+    XCTAssertEqual(partSizeAlign, partSize);
+
+    partSize = 4 * 1024 + 1;
+    partSize = [_client ceilPartSize:partSize];
+    XCTAssertEqual(partSizeAlign * 2, partSize);
 }
 
 @end
