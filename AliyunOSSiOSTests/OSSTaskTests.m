@@ -258,6 +258,26 @@
     [task waitUntilFinished];
 }
 
+- (void)testReturnErrorTaskFromContinuationWithException {
+    OSSTaskCompletionSource *tcs = [OSSTaskCompletionSource taskCompletionSource];
+    OSSTask *task = [[tcs.task continueWithBlock:^id(OSSTask *t) {
+        XCTAssertEqualObjects(@"foo", t.result);
+        NSArray *arr = @[];
+        [arr objectAtIndex:1];
+        NSError *originalError = [NSError errorWithDomain:@"Bolts" code:24 userInfo:nil];
+        return [OSSTask taskWithError:originalError];
+    }] continueWithBlock:^id(OSSTask *t) {
+        XCTAssertNotNil(t.error);
+        XCTAssertEqual(OSSClientErrorCodeExcpetionCatched, t.error.code);
+        return nil;
+    }];
+    [[OSSTask taskWithDelay:0] continueWithBlock:^id(OSSTask *t) {
+        tcs.result = @"foo";
+        return nil;
+    }];
+    [task waitUntilFinished];
+}
+
 - (void)testPassOnError {
     NSError *originalError = [NSError errorWithDomain:@"Bolts" code:30 userInfo:nil];
     [[[[[[[[OSSTask taskWithError:originalError] continueWithSuccessBlock:^id(OSSTask *t) {
@@ -294,6 +314,68 @@
     [task waitUntilFinished];
     
     XCTAssertTrue(task.isCancelled);
+}
+
+- (void)testCompleteWithSuccess {
+    OSSResult *putResult = [OSSPutObjectResult new];
+    OSSTaskCompletionSource *tcs = [OSSTaskCompletionSource taskCompletionSource];
+    OSSTask *task = [tcs.task completed:^(BOOL isSuccess, NSError * _Nullable error, OSSResult * _Nullable result) {
+        XCTAssertTrue(isSuccess);
+        XCTAssertNotNil(result);
+        XCTAssertEqual(result, putResult);
+    }];
+    [[OSSTask taskWithDelay:0] continueWithBlock:^id(OSSTask *t) {
+        tcs.result = putResult;
+        return nil;
+    }];
+    [task waitUntilFinished];
+}
+
+- (void)testCompleteWithError {
+    OSSTaskCompletionSource *tcs = [OSSTaskCompletionSource taskCompletionSource];
+    OSSTask *task = [tcs.task completed:^(BOOL isSuccess, NSError * _Nullable error, OSSResult * _Nullable result) {
+        XCTAssertFalse(isSuccess);
+        XCTAssertNotNil(error);
+        XCTAssertEqual(error.domain, @"Bolts");
+        XCTAssertEqual(error.code, 33);
+    }];
+    [[OSSTask taskWithDelay:0] continueWithBlock:^id(OSSTask *t) {
+        tcs.error = [NSError errorWithDomain:@"Bolts" code:33 userInfo:nil];
+        return nil;
+    }];
+    [task waitUntilFinished];
+}
+
+- (void)testCompleteWithException {
+    OSSTaskCompletionSource *tcs = [OSSTaskCompletionSource taskCompletionSource];
+    OSSTask *task = [tcs.task completed:^(BOOL isSuccess, NSError * _Nullable error, OSSResult * _Nullable result) {
+        XCTAssertFalse(isSuccess);
+        XCTAssertNotNil(error);
+        XCTAssertEqual(error.domain, OSSClientErrorDomain);
+        XCTAssertEqual(error.code, OSSClientErrorCodeExcpetionCatched);
+    }];
+    [[OSSTask taskWithDelay:0] continueWithBlock:^id(OSSTask *t) {
+        tcs.exception = [NSException exceptionWithName:NSInvalidArgumentException
+                                                reason:@"test"
+                                              userInfo:nil];
+        return nil;
+    }];
+    [task waitUntilFinished];
+}
+
+- (void)testCompleteWithCancel {
+    OSSTaskCompletionSource *tcs = [OSSTaskCompletionSource taskCompletionSource];
+    OSSTask *task = [tcs.task completed:^(BOOL isSuccess, NSError * _Nullable error, OSSResult * _Nullable result) {
+        XCTAssertFalse(isSuccess);
+        XCTAssertNotNil(error);
+        XCTAssertEqual(error.domain, OSSClientErrorDomain);
+        XCTAssertEqual(error.code, OSSClientErrorCodeTaskCancelled);
+    }];
+    [[OSSTask taskWithDelay:0] continueWithBlock:^id(OSSTask *t) {
+        [tcs cancel];
+        return nil;
+    }];
+    [task waitUntilFinished];
 }
 
 - (void)testTaskForCompletionOfAllTasksSuccess {

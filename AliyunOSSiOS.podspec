@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 
   s.name         = "AliyunOSSiOS"
 
-  s.version      = "2.10.12"
+  s.version      = "2.10.21"
 
   s.summary      = "An iOS SDK for Aliyun Object Storage Service"
 
@@ -24,6 +24,9 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.10'
 
   s.source_files = 'Supporting Files/AliyunOSSiOS.h', 'AliyunOSSSDK/*.{h,m,c}', 'AliyunOSSSDK/OSSTask/*.{h,m}','AliyunOSSSDK/OSSFileLog/*.{h,m}', 'AliyunOSSSDK/OSSIPv6/*.{h,m}'
+  s.resource_bundles = {
+    "#{s.module_name}_Privacy" => 'AliyunOSSSDK/PrivacyInfo.xcprivacy'
+  }
 
   s.ios.frameworks = 'SystemConfiguration','CoreTelephony'
   s.osx.frameworks = 'SystemConfiguration','CoreTelephony'

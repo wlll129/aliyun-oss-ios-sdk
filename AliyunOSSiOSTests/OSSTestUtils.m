@@ -7,6 +7,7 @@
 //
 
 #import "OSSTestUtils.h"
+#import <XCTest/XCTest.h>
 
 @implementation OSSTestUtils
 + (void)cleanBucket: (NSString *)bucket with: (OSSClient *)client {
@@ -68,6 +69,30 @@
     
     OSSTask * task = [client putObject:request];
     [task waitUntilFinished];
+}
+
++ (NSString *)getBucketName {
+    return [NSString stringWithFormat:@"bucket-%ld", @([NSDate date].timeIntervalSince1970).integerValue];
+}
+
+@end
+
+@interface OSSProgressTestUtils()
+
+@property (nonatomic, assign) int64_t totalBytesSent;
+@property (nonatomic, assign) int64_t totalBytesExpectedToSend;
+
+@end
+
+@implementation OSSProgressTestUtils
+
+- (void)updateTotalBytes:(int64_t)totalBytesSent totalBytesExpected:(int64_t)totalBytesExpectedToSend {
+    XCTAssertTrue(totalBytesSent <= totalBytesExpectedToSend);
+    self.totalBytesSent = totalBytesSent;
+    self.totalBytesExpectedToSend = totalBytesExpectedToSend;
+}
+- (BOOL)completeValidateProgress {
+    return self.totalBytesSent == self.totalBytesExpectedToSend;
 }
 
 @end

@@ -37,6 +37,7 @@ typedef OSSFederationToken * _Nullable (^OSSGetFederationTokenBlock) (void);
 - (NSArray *)allKeys;
 - (void)setObject:(id)anObject forKey:(id <NSCopying>)aKey;
 - (void)removeObjectForKey:(id)aKey;
+- (void)addObserverForResetCurrentRetryCount;
 @end
 
 /**
@@ -115,7 +116,6 @@ TODOTODO
 /**
  The STS token's credential provider.
  */
-__attribute__((deprecated("Please use OSSAuthCredentialProvider or its subClass instead!")))
 @interface OSSStsTokenCredentialProvider : NSObject <OSSCredentialProvider>
 @property (nonatomic, copy) NSString * accessKeyId;
 @property (nonatomic, copy) NSString * secretKeyId;
@@ -220,8 +220,22 @@ Sets the session Id for background file transmission
  */
 @property (nonatomic, assign) BOOL crc64Verifiable;
 
-/// Monitor the network. If the network type is changed, recheck the IPv6 status.
-@property (nonatomic, assign) BOOL isNeedListenNetworkChanges;
+/// Set whether to allow UA to carry system information
+@property (nonatomic, assign) BOOL isAllowUACarrySystemInfo;
+
+/// Set whether to allow the redirection with a modified request
+@property (nonatomic, assign) BOOL isFollowRedirectsEnable;
+
+/// The maximum number of simultaneous persistent connections per host.
+/// The default value is NSURLSessionConfiguration's default value
+/// https://developer.apple.com/documentation/foundation/urlsessionconfiguration/1407597-httpmaximumconnectionsperhost
+@property (nonatomic, assign) uint32_t HTTPMaximumConnectionsPerHost;
+
+/// Set whether to allow retry attempts when the app switches to the background
+@property (nonatomic, assign) BOOL isAllowResetRetryCount;
+
+/// Set whether to allow metric information
+@property (nonatomic, assign) BOOL isAllowNetworkMetricInfo;
 
 @end
 
@@ -1408,6 +1422,10 @@ The result class of listing uploaded parts.
  */
 @property (nonatomic, copy) NSString *md5String;
 
+/// The concurrent number of shard uploads
+@property (nonatomic, assign) uint32_t threadNum;
+
+@property (nonatomic, assign) OSSTerminationMode terminationMode;
 
 - (void)cancel;
 @end

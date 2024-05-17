@@ -69,6 +69,9 @@ typedef NS_ENUM(NSInteger, OSSOperationType) {
     OSSOperationTypeRestoreObject,
     OSSOperationTypePutSymlink,
     OSSOperationTypeGetSymlink,
+    OSSOperationTypeGetObjectTagging,
+    OSSOperationTypePutObjectTagging,
+    OSSOperationTypeDeleteObjectTagging,
 };
 
 /**
@@ -85,7 +88,8 @@ typedef NS_ENUM(NSInteger, OSSClientErrorCODE) {
     OSSClientErrorCodeInvalidCRC,
     OSSClientErrorCodeCannotResumeUpload,
     OSSClientErrorCodeExcpetionCatched,
-    OSSClientErrorCodeNotKnown
+    OSSClientErrorCodeNotKnown,
+    OSSClientErrorCodeFileCantRead
 };
 
 typedef NS_ENUM(NSInteger, OSSXMLDictionaryAttributesMode)
@@ -109,6 +113,11 @@ typedef NS_ENUM(NSInteger, OSSBucketStorageClass)
     OSSBucketStorageClassStandard,
     OSSBucketStorageClassIA,
     OSSBucketStorageClassArchive
+};
+
+typedef NS_ENUM(NSInteger, OSSTerminationMode) {
+    OSSTerminationModeAll = 0,
+    OSSTerminationModeHasError
 };
 
 typedef NSString * OSSXMLDictionaryAttributeName NS_EXTENSIBLE_STRING_ENUM;

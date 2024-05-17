@@ -14,9 +14,11 @@
 #import "OSSXMLDictionary.h"
 #if TARGET_OS_IOS
 #import <UIKit/UIDevice.h>
+#import <UIKit/UIApplication.h>
 #endif
 
 #import "OSSAllRequestNeededMessage.h"
+#import "OSSNetworkingRequestDelegate.h"
 
 @implementation NSDictionary (OSS)
 
@@ -48,6 +50,22 @@
     return self;
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)addObserverForResetCurrentRetryCount {
+#if TARGET_OS_IOS
+    NSString *notificationName = UIApplicationWillEnterForegroundNotification;
+    // When App switches to active status, refresh the IPv6-only check.
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self
+                      selector:@selector(appWillEnterForeground)
+                          name:notificationName
+                        object:nil];
+#endif
+}
+
 - (NSArray *)allKeys {
     __block NSArray *allKeys = nil;
     dispatch_sync(self.dispatchQueue, ^{
@@ -75,6 +93,15 @@
 - (void)removeObjectForKey:(id)aKey {
     dispatch_sync(self.dispatchQueue, ^{
         [self.dictionary removeObjectForKey:aKey];
+    });
+}
+
+- (void)appWillEnterForeground {
+    dispatch_sync(self.dispatchQueue, ^{
+        for (NSString *key in self.dictionary.allKeys) {
+            OSSNetworkingRequestDelegate *delegate = self.dictionary[key];
+            delegate.currentRetryCount = 0;
+        }
     });
 }
 
@@ -164,6 +191,7 @@
         } else {
             if (self.cachedToken.expirationTimeInGMTFormat) {
                 NSDateFormatter * fm = [NSDateFormatter new];
+                fm.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
                 [fm setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
                 self.cachedToken.expirationTimeInMilliSecond = [[fm dateFromString:self.cachedToken.expirationTimeInGMTFormat] timeIntervalSince1970] * 1000;
                 self.cachedToken.expirationTimeInGMTFormat = nil;
@@ -292,13 +320,19 @@ NSString * const BACKGROUND_SESSION_IDENTIFIER = @"com.aliyun.oss.backgroundsess
         self.maxRetryCount = OSSDefaultRetryCount;
         self.maxConcurrentRequestCount = OSSDefaultMaxConcurrentNum;
         self.enableBackgroundTransmitService = NO;
-        self.isHttpdnsEnable = YES;
+        self.isHttpdnsEnable = NO;
         self.backgroundSesseionIdentifier = BACKGROUND_SESSION_IDENTIFIER;
         self.timeoutIntervalForRequest = OSSDefaultTimeoutForRequestInSecond;
         self.timeoutIntervalForResource = OSSDefaultTimeoutForResourceInSecond;
         self.isPathStyleAccessEnable = NO;
         self.isCustomPathPrefixEnable = NO;
         self.cnameExcludeList = @[];
+        self.isAllowUACarrySystemInfo = YES;
+        self.isFollowRedirectsEnable = YES;
+        // When the value <= 0, do not set HTTPMaximumConnectionsPerHost and use the default value of NSURLSessionConfiguration
+        self.HTTPMaximumConnectionsPerHost = 0;
+        self.isAllowResetRetryCount = NO;
+        self.isAllowNetworkMetricInfo = NO;
     }
     return self;
 }
@@ -338,7 +372,7 @@ NSString * const BACKGROUND_SESSION_IDENTIFIER = @"com.aliyun.oss.backgroundsess
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         OSSSubResourceARRAY = @[@"acl", @"uploadId", @"partNumber", @"uploads", @"logging", @"website", @"location",
-                                @"lifecycle", @"referer", @"cors", @"delete", @"append", @"position", @"security-token", @"x-oss-process", @"sequential",@"bucketInfo",@"symlink", @"restore"];
+                                @"lifecycle", @"referer", @"cors", @"delete", @"append", @"position", @"security-token", @"x-oss-process", @"sequential",@"bucketInfo",@"symlink", @"restore", @"tagging"];
     });
     /****************************************************************/
 
@@ -475,9 +509,13 @@ NSString * const BACKGROUND_SESSION_IDENTIFIER = @"com.aliyun.oss.backgroundsess
     dispatch_once(&once, ^{
         NSString *localeIdentifier = [[NSLocale currentLocale] localeIdentifier];
 #if TARGET_OS_IOS
-        NSString *systemName = [[[UIDevice currentDevice] systemName] stringByReplacingOccurrencesOfString:@" " withString:@"-"];
-        NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
-        userAgent = [NSString stringWithFormat:@"%@/%@(/%@/%@/%@)", OSSUAPrefix, OSSSDKVersion, systemName, systemVersion, localeIdentifier];
+        if (self.clientConfiguration.isAllowUACarrySystemInfo) {
+            NSString *systemName = [[[UIDevice currentDevice] systemName] stringByReplacingOccurrencesOfString:@" " withString:@"-"];
+            NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+            userAgent = [NSString stringWithFormat:@"%@/%@(/%@/%@/%@)", OSSUAPrefix, OSSSDKVersion, systemName, systemVersion, localeIdentifier];
+        } else {
+            userAgent = [NSString stringWithFormat:@"%@/%@(/%@)", OSSUAPrefix, OSSSDKVersion, localeIdentifier];
+        }
 #elif TARGET_OS_OSX
         userAgent = [NSString stringWithFormat:@"%@/%@(/%@/%@/%@)", OSSUAPrefix, OSSSDKVersion, @"OSX", [NSProcessInfo processInfo].operatingSystemVersionString, localeIdentifier];
 #endif
@@ -814,6 +852,8 @@ NSString * const BACKGROUND_SESSION_IDENTIFIER = @"com.aliyun.oss.backgroundsess
 - (instancetype)init {
     if (self = [super init]) {
         self.partSize = 256 * 1024;
+        self.threadNum = OSSDefaultThreadNum;
+        self.terminationMode = OSSTerminationModeAll;
     }
     return self;
 }

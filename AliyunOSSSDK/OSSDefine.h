@@ -16,7 +16,7 @@
 #elif TARGET_OS_OSX
 #define OSSUAPrefix                             @"aliyun-sdk-mac"
 #endif
-#define OSSSDKVersion                           @"2.10.12"
+#define OSSSDKVersion                           @"2.10.21"
 
 #define OSSListBucketResultXMLTOKEN             @"ListBucketResult"
 #define OSSNameXMLTOKEN                         @"Name"
@@ -59,6 +59,7 @@
 #define OSSServerErrorDomain                    @"com.aliyun.oss.serverError"
 
 #define OSSErrorMessageTOKEN                    @"ErrorMessage"
+#define OSSNetworkTaskMetrics                   @"NetworkTaskMetrics"
 
 #define OSSHttpHeaderContentDisposition         @"Content-Disposition"
 #define OSSHttpHeaderXOSSCallback               @"x-oss-callback"
@@ -80,5 +81,6 @@
 #define OSSDefaultMaxConcurrentNum              5
 #define OSSDefaultTimeoutForRequestInSecond     15
 #define OSSDefaultTimeoutForResourceInSecond    7 * 24 * 60 * 60
+#define OSSDefaultThreadNum                     5
 
 #endif /* OSSDefine_h */

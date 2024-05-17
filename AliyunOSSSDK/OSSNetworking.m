@@ -43,6 +43,9 @@
         if (configuration.timeoutIntervalForResource > 0) {
             conf.timeoutIntervalForResource = configuration.timeoutIntervalForResource;
         }
+        if (configuration.HTTPMaximumConnectionsPerHost > 0) {
+            conf.HTTPMaximumConnectionsPerHost = configuration.HTTPMaximumConnectionsPerHost;
+        }
         
         if (configuration.proxyHost && configuration.proxyPort) {
             // Create an NSURLSessionConfiguration that uses the proxy
@@ -64,6 +67,9 @@
 
         self.isUsingBackgroundSession = configuration.enableBackgroundTransmitService;
         _sessionDelagateManager = [OSSSyncMutableDictionary new];
+        if (configuration.enableResetRetryCount) {
+            [_sessionDelagateManager addObserverForResetCurrentRetryCount];
+        }
 
         NSOperationQueue * operationQueue = [NSOperationQueue new];
         if (configuration.maxConcurrentRequestCount > 0) {
@@ -75,11 +81,6 @@
 }
 
 - (OSSTask *)sendRequest:(OSSNetworkingRequestDelegate *)request {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        OSSLogVerbose(@"NetWorkConnectedMsg : %@",[OSSUtil buildNetWorkConnectedMsg]);
-        NSString *operator = [OSSUtil buildOperatorMsg];
-        if(operator) OSSLogVerbose(@"Operator : %@",[OSSUtil buildOperatorMsg]);
-    });
     OSSLogVerbose(@"send request --------");
     if (self.configuration.proxyHost && self.configuration.proxyPort) {
         request.isAccessViaProxy = YES;
@@ -97,7 +98,15 @@
         // 1.判断是否出错，如果出错的话，直接设置错误信息
         if (error)
         {
-            [taskCompletionSource setError:error];
+            if (weakRequest.metrics) {
+                NSMutableDictionary *userInfo = error.userInfo ? [NSMutableDictionary dictionaryWithDictionary:error.userInfo] : [NSMutableDictionary dictionary];
+                [userInfo oss_setObject:weakRequest.metrics forKey:OSSNetworkTaskMetrics];
+                [taskCompletionSource setError:[NSError errorWithDomain:error.domain
+                                                                   code:error.code
+                                                               userInfo:userInfo]];
+            } else {
+                [taskCompletionSource setError:error];
+            }
         }else
         {
             [self checkForCrc64WithResult:responseObject
@@ -381,7 +390,9 @@
             
             [self dataTaskWithDelegate:delegate];
         } else {
-            delegate.completionHandler([delegate.responseParser constructResultObject], nil);
+            OSSResult *result = [delegate.responseParser constructResultObject];
+            result.metrics = delegate.metrics;
+            delegate.completionHandler(result, nil);
         }
         return nil;
     }];
@@ -429,6 +440,25 @@
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
 {
     
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+                     willPerformHTTPRedirection:(NSHTTPURLResponse *)response
+                                     newRequest:(NSURLRequest *)request
+                              completionHandler:(void (^)(NSURLRequest * _Nullable))completionHandler {
+    if (self.configuration.enableFollowRedirects) {
+        completionHandler(request);
+    } else {
+        completionHandler(nil);
+    }
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didFinishCollectingMetrics:(NSURLSessionTaskMetrics *)metrics {
+    if (self.configuration.enableNetworkMetricInfo) {
+        OSSNetworkingRequestDelegate *delegate = [self.sessionDelagateManager objectForKey:@(task.taskIdentifier)];
+        delegate.metrics = metrics;
+        OSSLogDebug(@"%@", metrics);
+    }
 }
 
 #pragma mark - NSURLSessionDataDelegate Methods
