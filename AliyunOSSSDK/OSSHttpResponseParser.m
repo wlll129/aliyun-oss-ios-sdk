@@ -133,7 +133,9 @@
 - (void)parseResponseHeader:(NSHTTPURLResponse *)response toResultObject:(OSSResult *)result
 {
     result.httpResponseCode = [_response statusCode];
-    result.httpResponseHeaderFields = [NSDictionary dictionaryWithDictionary:[_response allHeaderFields]];
+    NSMutableDictionary *headers = [NSMutableDictionary dictionaryWithDictionary:[_response allHeaderFields]];
+    [headers oss_setObject:headers[@"Etag"] forKey:@"ETag"];
+    result.httpResponseHeaderFields = headers;
     [[_response allHeaderFields] enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSString * keyString = (NSString *)key;
         if ([keyString isEqualToString:@"x-oss-request-id"])
@@ -164,6 +166,9 @@
         NSString * keyString = (NSString *)key;
         if ([OSSObjectMetaFieldNames containsObject:keyString] || [keyString hasPrefix:@"x-oss-meta"]) {
             [meta setObject:obj forKey:key];
+            if ([key isEqualToString:@"Etag"]) {
+                [meta setObject:obj forKey:@"Etag"];
+            }
         }
     }];
     return meta;

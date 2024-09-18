@@ -242,6 +242,7 @@
                                                           userInfo:nil]];
         }
         [sessionTask resume];
+        NSLog(@"[resumble] %@ start", sessionTask);
       
         return task;
     }] continueWithBlock:^id(OSSTask *task) {
@@ -262,6 +263,8 @@
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)sessionTask didCompleteWithError:(NSError *)error
 {
+    NSLog(@"[resumble] %@ end", sessionTask);
+
     if (error) {
         OSSLogError(@"%@,error: %@", NSStringFromSelector(_cmd), error);
     }
@@ -353,7 +356,7 @@
                         OSSLogError(@"Date header does not exist, unable to fix the clock skew");
                     }
                     
-                    [delegate.interceptors insertObject:[OSSTimeSkewedFixingInterceptor new] atIndex:0];
+//                    [delegate.interceptors insertObject:[OSSTimeSkewedFixingInterceptor new] atIndex:0];
                     break;
                 }
 

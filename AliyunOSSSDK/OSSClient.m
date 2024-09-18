@@ -125,6 +125,7 @@ static NSObject *lock;
 }
 
 - (OSSTask *)invokeRequest:(OSSNetworkingRequestDelegate *)request requireAuthentication:(BOOL)requireAuthentication {
+    request.allNeededMessage.isAuthenticationRequired = requireAuthentication;
     /* if content-type haven't been set, we set one */
     if (!request.allNeededMessage.contentType.oss_isNotEmpty
         && ([request.allNeededMessage.httpMethod isEqualToString:@"POST"] || [request.allNeededMessage.httpMethod isEqualToString:@"PUT"])) {
@@ -142,12 +143,18 @@ static NSObject *lock;
 
     id<OSSRequestInterceptor> uaSetting = [[OSSUASettingInterceptor alloc] initWithClientConfiguration:self.clientConfiguration];
     [request.interceptors addObject:uaSetting];
-
-    /* check if the authentication is required */
-    if (requireAuthentication) {
-        id<OSSRequestInterceptor> signer = [[OSSSignerInterceptor alloc] initWithCredentialProvider:self.credentialProvider];
-        [request.interceptors addObject:signer];
+    
+    if (self.clientConfiguration.signVersion == OSSSignVersionV4 && self.region == nil) {
+        return [OSSTask taskWithError:[NSError errorWithDomain:OSSClientErrorDomain
+                                                          code:OSSClientErrorCodeInvalidArgument
+                                                      userInfo:@{OSSErrorMessageTOKEN: @"Region haven't been set!"}]];
     }
+
+    OSSSignerInterceptor *signer = [[OSSSignerInterceptor alloc] initWithCredentialProvider:self.credentialProvider];
+    signer.version = self.clientConfiguration.signVersion;
+    signer.region = self.region;
+    signer.cloudBoxId = self.cloudBoxId;
+    [request.interceptors addObject:signer];
 
     request.isHttpdnsEnable = self.clientConfiguration.isHttpdnsEnable;
     request.isPathStyleAccessEnable = self.clientConfiguration.isPathStyleAccessEnable;
@@ -1220,6 +1227,26 @@ static NSObject *lock;
     }
     
     OSSTask * completeTask = [self completeMultipartUpload:complete];
+    [completeTask waitUntilFinished];
+    
+    complete = [OSSCompleteMultipartUploadRequest new];
+    complete.bucketName = request.bucketName;
+    complete.objectKey = request.objectKey;
+    complete.uploadId = request.uploadId;
+    complete.partInfos = partInfos;
+    complete.crcFlag = request.crcFlag;
+    complete.contentSHA1 = request.contentSHA1;
+    
+    if (request.completeMetaHeader != nil) {
+        complete.completeMetaHeader = request.completeMetaHeader;
+    }
+    if (request.callbackParam != nil) {
+        complete.callbackParam = request.callbackParam;
+    }
+    if (request.callbackVar != nil) {
+        complete.callbackVar = request.callbackVar;
+    }
+    completeTask = [self completeMultipartUpload:complete];
     [completeTask waitUntilFinished];
     
     if (completeTask.error) {

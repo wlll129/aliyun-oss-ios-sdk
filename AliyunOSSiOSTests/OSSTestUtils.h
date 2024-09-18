@@ -12,6 +12,8 @@
 @interface OSSTestUtils : NSObject
 + (void)cleanBucket: (NSString *)bucket with: (OSSClient *)client;
 + (void) putTestDataWithKey: (NSString *)key withClient: (OSSClient *)client withBucket: (NSString *)bucket;
++ (NSString *)getBucketName;
++ (OSSFederationToken *)getOssFederationToken;
 @end
 
 @interface OSSProgressTestUtils : NSObject
